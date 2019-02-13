@@ -2,7 +2,7 @@ import React from "react";
 import style from "./Input.scss";
 import classnames from "classnames";
 
-function Input({ label, name, icon, errorMessage, children, ...props }) {
+function Input({ label, name, icon, hint, errorMessage, children, ...props }) {
     const className = classnames(style["input"], {
         [style["with-icon"]]: icon
     });
@@ -13,6 +13,7 @@ function Input({ label, name, icon, errorMessage, children, ...props }) {
                 <label htmlFor={label}>{label}</label>
             </div>
             {children}
+            <div className={style["hint"]}>{hint}</div>
         </div>
     );
 }
