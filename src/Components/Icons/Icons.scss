@@ -11,3 +11,9 @@
     pointer-events: none;
     left: 0.5rem;
 }
+
+.icon-right {
+    @include icon;
+    right: 0.625rem;
+    cursor: pointer;
+}
