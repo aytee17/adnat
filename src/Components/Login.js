@@ -13,7 +13,6 @@ function Login() {
     const [password, setPassword] = useState("");
     return (
         <div>
-            <Logo />
             <div className={style["container"]}>
                 <Input
                     label={"Email"}
