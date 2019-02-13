@@ -1,6 +1,5 @@
 import React from "react";
 import style from "./Home.scss";
-import classnames from "classnames";
 
 import Logo from "./Logo";
 import Login from "./Login";

@@ -1,6 +1,5 @@
 import React from "react";
 import style from "./SignUp.scss";
-import classnames from "classnames";
 
 import Input from "./Controls/Input";
 import Button from "./Controls/Button";
