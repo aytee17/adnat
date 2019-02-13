@@ -1,16 +1,24 @@
 @import "../variables.scss";
 
-.home {
+.container {
     position: relative;
     width: 100%;
     border-bottom: 2px solid $main-color;
     padding-bottom: 15px;
 }
 
-.top {
-    display: flex;
-    justify-content: space-between;
+@mixin common {
     margin: 0 auto;
     width: 90%;
+}
+
+.top {
+    @include common;
+    display: flex;
+    justify-content: space-between;
     margin-top: 20px;
+}
+
+.bottom {
+    @include common;
 }
