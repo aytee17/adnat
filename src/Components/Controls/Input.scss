@@ -47,24 +47,25 @@ $border-grey: #c3c3c3;
     position: absolute;
     top: 7px;
     right: -30px;
+    animation: slideIn 0.15s ease-in;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-7px);
+    }
+
+    to {
+        transform: translateY(0);
+    }
 }
 
 .label {
     position: absolute;
     animation-duration: 0.15s;
-    animation-name: slidein;
+    animation-name: slideIn;
     transform: translateY(-58px);
     font-size: 13px;
-}
-
-@keyframes slidein {
-    from {
-        transform: translateY(-55px);
-    }
-
-    to {
-        transform: translateY(-58px);
-    }
 }
 
 .hint {
