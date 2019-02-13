@@ -31,7 +31,9 @@
     "dependencies": {
         "@reach/router": "^1.2.1",
         "classnames": "^2.2.6",
+        "formik": "^1.5.0",
         "react": "^16.8.1",
-        "react-dom": "^16.8.1"
+        "react-dom": "^16.8.1",
+        "yup": "^0.26.10"
     }
 }
