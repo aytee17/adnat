@@ -1,6 +1,7 @@
 const merge = require("webpack-merge");
 const common = require("./webpack.config.js");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const webpack = require("webpack");
 
 module.exports = merge.smart(common, {
     mode: "development",
@@ -11,6 +12,9 @@ module.exports = merge.smart(common, {
     plugins: [
         new MiniCssExtractPlugin({
             filename: "[name].css"
+        }),
+        new webpack.DefinePlugin({
+            API_ENDPOINT: JSON.stringify("http://localhost:3000")
         })
     ],
     module: {
