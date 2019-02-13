@@ -62,10 +62,19 @@ $border-grey: #c3c3c3;
 
 .label {
     position: absolute;
-    animation-duration: 0.15s;
-    animation-name: slideIn;
+    animation: slideUp 0.15s ease-in;
     transform: translateY(-58px);
     font-size: 13px;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(-55px);
+    }
+
+    to {
+        transform: translateY(-58px);
+    }
 }
 
 .hint {
