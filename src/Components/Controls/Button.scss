@@ -1,0 +1,22 @@
+@import "../../variables.scss";
+
+.button {
+    text-decoration: none;
+    height: 40px;
+    border-radius: 3px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    padding: 10px;
+    color: #fff;
+    background-color: $main-color;
+    font-size: 1rem;
+    text-align: center;
+    width: 80px;
+    margin-top: 10px;
+
+    &:active {
+        background-color: #4095c6;
+    }
+}

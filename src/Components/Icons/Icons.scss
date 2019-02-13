@@ -1,0 +1,13 @@
+@mixin icon {
+    position: absolute;
+    top: 9px;
+    opacity: 0.6;
+}
+
+.icon {
+    @include icon;
+    fill: currentColor;
+    transition: 0.1s ease-in;
+    pointer-events: none;
+    left: 0.5rem;
+}
