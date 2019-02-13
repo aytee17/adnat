@@ -15,6 +15,9 @@ function Login() {
         <div>
             <div className={style["container"]}>
                 <Input
+                    style={{
+                        width: "250px"
+                    }}
                     label={"Email"}
                     name="email"
                     type="email"
@@ -26,6 +29,9 @@ function Login() {
                     <MailIcon />
                 </Input>
                 <Input
+                    style={{
+                        width: "250px"
+                    }}
                     label={"Password"}
                     name="password"
                     type="password"
@@ -36,7 +42,7 @@ function Login() {
                 >
                     <LockIcon />
                 </Input>
-                <Button>Login ❯</Button>
+                <Button style={{ width: "80px" }}>Login ❯</Button>
             </div>
             <div className={style["second-container"]}>
                 <div className={style["forgot-password"]}>
