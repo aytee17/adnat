@@ -32,7 +32,9 @@ function Input({
                 <label htmlFor={label}>{label}</label>
             </div>
             {children}
-            <div className={messageClassName}>{errorMessage || hint}</div>
+            <div className={messageClassName}>
+                {(invalid && errorMessage) || hint}
+            </div>
         </div>
     );
 }
