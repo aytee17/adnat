@@ -1,30 +1,46 @@
-import React, { useState } from "react";
+import React from "react";
 import style from "./Login.scss";
-import classnames from "classnames";
+
+import { withFormik } from "formik";
+import { object, string } from "yup";
 
 import Input from "./Controls/Input";
-import { MailIcon, LockIcon } from "./Icons/Icons";
+import { MailIcon, LockIcon, VisibilityIcon } from "./Icons/Icons";
 import Button from "./Controls/Button";
 import { Link } from "@reach/router";
-import Logo from "./Logo";
 
-function Login() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+function InnerForm({
+    values,
+    errors,
+    touched,
+    handleSubmit,
+    handleChange,
+    handleBlur,
+    isSubmitting,
+    setStatus,
+    status = { visiblePassword: false }
+}) {
     return (
-        <div>
+        <form onSubmit={handleSubmit}>
             <div className={style["container"]}>
                 <Input
                     style={{
                         width: "250px"
                     }}
-                    label={"Email"}
+                    label="Email"
                     name="email"
                     type="email"
                     required={true}
                     icon={true}
-                    value={email}
-                    onChange={event => setEmail(event.target.value)}
+                    invalid={touched.email && errors.email}
+                    errorMessage={errors.email}
+                    disabled={isSubmitting}
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    spellCheck="false"
+                    autoCorrect="false"
+                    autoCapitalize="false"
                 >
                     <MailIcon />
                 </Input>
@@ -32,17 +48,37 @@ function Login() {
                     style={{
                         width: "250px"
                     }}
-                    label={"Password"}
+                    label="Password"
                     name="password"
-                    type="password"
+                    type={status.visiblePassword ? "text" : "password"}
                     required={true}
                     icon={true}
-                    value={password}
-                    onChange={event => setPassword(event.target.value)}
+                    disabled={isSubmitting}
+                    value={values.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    invalid={touched.password && errors.password}
+                    errorMessage={errors.password}
+                    spellCheck="false"
+                    autoCorrect="false"
+                    autoCapitalize="false"
                 >
                     <LockIcon />
+                    <VisibilityIcon
+                        visiblePassword={status.visiblePassword}
+                        setVisiblePassword={value =>
+                            setStatus({ visiblePassword: value })
+                        }
+                    />
                 </Input>
-                <Button style={{ width: "80px" }}>Login ❯</Button>
+                <Button
+                    style={{ width: "80px" }}
+                    type="submit"
+                    disabled={isSubmitting}
+                    formNoValidate={true}
+                >
+                    Login ❯
+                </Button>
             </div>
             <div className={style["second-container"]}>
                 <div className={style["forgot-password"]}>
@@ -55,8 +91,22 @@ function Login() {
                     <span>Remember me</span>
                 </div>
             </div>
-        </div>
+        </form>
     );
 }
+
+const Login = withFormik({
+    mapPropsToValues: props => ({
+        email: "",
+        password: ""
+    }),
+    validationSchema: object().shape({
+        email: string()
+            .email("Incorrect email address structure")
+            .required("Enter your email address"),
+        password: string().required("Enter your password")
+    }),
+    handleSubmit: () => {}
+})(InnerForm);
 
 export default Login;
