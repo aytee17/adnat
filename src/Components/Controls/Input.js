@@ -2,6 +2,8 @@ import React from "react";
 import style from "./Input.scss";
 import classnames from "classnames";
 
+import { TickIcon } from "../Icons/Icons";
+
 function Input({
     label,
     name,
@@ -9,6 +11,7 @@ function Input({
     hint,
     invalid,
     errorMessage,
+    correct,
     children,
     ...props
 }) {
@@ -28,6 +31,11 @@ function Input({
                 name={name}
                 {...props}
             />
+            {correct && (
+                <span className={style["tick"]}>
+                    <TickIcon />
+                </span>
+            )}
             <div className={style["label"]}>
                 <label htmlFor={label}>{label}</label>
             </div>

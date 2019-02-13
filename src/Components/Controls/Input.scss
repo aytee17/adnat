@@ -43,8 +43,10 @@ $border-grey: #c3c3c3;
     }
 }
 
-.block {
-    height: 20px;
+.tick {
+    position: absolute;
+    top: 7px;
+    right: -30px;
 }
 
 .label {
