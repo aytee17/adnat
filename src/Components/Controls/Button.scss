@@ -23,4 +23,8 @@
     &:active {
         background-color: $main-color-darker;
     }
+
+    &.active {
+        background-color: $main-color-darker;
+    }
 }
