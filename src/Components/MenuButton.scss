@@ -1,0 +1,56 @@
+@import "../variables.scss";
+
+.button {
+    cursor: pointer;
+    position: relative;
+    border-radius: 2px;
+    background-color: $main-color;
+    padding: 3px;
+    display: flex;
+    align-items: center;
+    padding: 0 7.5px 0 7.5px;
+
+    &.open,
+    &:hover {
+        background-color: $main-color-light;
+    }
+}
+
+.menu {
+    background-color: #fff;
+    position: absolute;
+    overflow: hidden;
+    right: 0;
+    top: 55px;
+    width: 12.5rem;
+    color: #676767;
+    visibility: hidden;
+    z-index: 99;
+
+    border-radius: 3px;
+    opacity: 0;
+    transition: 0.15s ease-in;
+    border: 1px solid #dfdfdf;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+
+    &.open {
+        transform: translateY(5px);
+        opacity: 1;
+        transition: 0.2s ease-out;
+        visibility: visible;
+    }
+}
+
+.menu-item {
+    cursor: pointer;
+    padding: 0.7rem 1rem;
+    font-size: 0.85rem;
+
+    &.top {
+        border-bottom: 1px solid #dfdfdf;
+    }
+
+    &:hover {
+        background-color: $main-color-lightest;
+    }
+}
