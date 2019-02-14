@@ -2,12 +2,13 @@ import React from "react";
 import style from "./Login.scss";
 
 import { withFormik } from "formik";
-import { object, string } from "yup";
+import { object, string, bool } from "yup";
 
 import Input from "./Controls/Input";
 import { MailIcon, LockIcon, VisibilityIcon } from "./Icons/Icons";
 import Button from "./Controls/Button";
 import { Link } from "@reach/router";
+import { api } from "../utils/api";
 
 function InnerForm({
     values,
@@ -87,7 +88,12 @@ function InnerForm({
                     </Link>
                 </div>
                 <div className={style["remember"]}>
-                    <input type="checkbox" />
+                    <input
+                        type="checkbox"
+                        disabled={isSubmitting}
+                        defaultChecked={values.remember}
+                        onChange={handleChange}
+                    />
                     <span>Remember me</span>
                 </div>
             </div>
@@ -96,17 +102,29 @@ function InnerForm({
 }
 
 const Login = withFormik({
-    mapPropsToValues: props => ({
+    mapPropsToValues: () => ({
         email: "",
-        password: ""
+        password: "",
+        remember: true
     }),
     validationSchema: object().shape({
         email: string()
             .email("Incorrect email address structure")
             .required("Enter your email address"),
-        password: string().required("Enter your password")
+        password: string().required("Enter your password"),
+        remember: bool()
     }),
-    handleSubmit: () => {}
+    handleSubmit: (values, { props, setSubmitting, setErrors, setStatus }) => {
+        setStatus({ visiblePassword: false });
+
+        api.post("/auth/login", {
+            ...values,
+            email: values.email.trim()
+        }).then(response => {
+            setSubmitting(false);
+            props.login(response.data.sessionId);
+        });
+    }
 })(InnerForm);
 
 export default Login;

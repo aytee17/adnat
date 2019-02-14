@@ -1,24 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import style from "./Home.scss";
 
 import Logo from "./Logo";
 import Login from "./Login";
 import SignUp from "./SignUp";
 
-function Home() {
+import { Link } from "@reach/router";
+
+function Home({ login }) {
     return (
-        <>
+        <React.Fragment>
             <div className={style["container"]}>
                 <div className={style["top"]}>
                     <Logo />
-                    <Login />
+                    <Login login={login} />
                 </div>
             </div>
 
             <div className={style["bottom"]}>
-                <SignUp />
+                <SignUp login={login} />
             </div>
-        </>
+        </React.Fragment>
     );
 }
 

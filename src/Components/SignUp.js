@@ -8,6 +8,8 @@ import Input from "./Controls/Input";
 import { VisibilityIcon } from "./Icons/Icons";
 import Button from "./Controls/Button";
 
+import { api } from "../utils/api";
+
 function InnerForm({
     values,
     errors,
@@ -15,6 +17,7 @@ function InnerForm({
     handleBlur,
     handleChange,
     handleSubmit,
+    isSubmitting,
     setStatus,
     status = { visiblePassword: false, visibleConfirmation: false }
 }) {
@@ -88,7 +91,13 @@ function InnerForm({
                         }
                     />
                 </Input>
-                <Button>Sign Up</Button>
+                <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    formNoValidate={true}
+                >
+                    Sign Up
+                </Button>
             </div>
         </form>
     );
@@ -119,7 +128,18 @@ const SignUp = withFormik({
                 )
             )
     }),
-    handleSubmit: () => {}
+    handleSubmit: (values, { props, setSubmitting, setErrors, setStatus }) => {
+        setStatus({ visiblePassword: false, visibleConfirmation: false });
+
+        api.post("/auth/signup", {
+            ...values,
+            name: values.name.trim(),
+            email: values.email.trim()
+        }).then(response => {
+            setSubmitting(false);
+            props.login(response.data.sessionId);
+        });
+    }
 })(InnerForm);
 
 export default SignUp;
