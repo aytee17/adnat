@@ -1,0 +1,13 @@
+.logo {
+    font-family: "Patua One";
+    font-size: 45px;
+    text-align: center;
+
+    &.small {
+        font-size: 35px;
+    }
+
+    &.white {
+        color: #fff;
+    }
+}
