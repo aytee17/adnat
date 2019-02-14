@@ -1,6 +1,7 @@
 import React from "react";
 import style from "./NavBar.scss";
 import { MenuButton, MenuItem } from "./MenuButton";
+import Logo from "./Logo";
 import { api } from "../utils/api";
 
 function NavBar({ name, email, logout }) {
@@ -13,7 +14,7 @@ function NavBar({ name, email, logout }) {
     return (
         <div className={style["bar"]}>
             <div className={style["container"]}>
-                <div>Adnat</div>
+                <Logo small white />
                 <MenuButton>
                     <MenuItem top={true}>
                         <div>{name}</div>
