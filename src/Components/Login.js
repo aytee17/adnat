@@ -73,7 +73,7 @@ function InnerForm({
                     />
                 </Input>
                 <Button
-                    style={{ width: "80px" }}
+                    style={{ width: "80px", marginTop: "20px" }}
                     type="submit"
                     disabled={isSubmitting}
                     formNoValidate={true}
