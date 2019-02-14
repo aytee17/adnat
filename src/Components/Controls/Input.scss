@@ -4,7 +4,7 @@ $border-grey: #c3c3c3;
 .container {
     position: relative;
     display: block;
-    margin-top: 10px;
+    margin-top: 20px;
 
     &:focus-within {
         color: $main-color;
@@ -40,6 +40,10 @@ $border-grey: #c3c3c3;
 
     &.with-icon {
         padding-left: 36px;
+    }
+
+    &.with-symbol {
+        padding-left: 16px;
     }
 }
 

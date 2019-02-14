@@ -8,6 +8,7 @@ function Input({
     label,
     name,
     icon,
+    symbol,
     hint,
     invalid,
     errorMessage,
@@ -16,7 +17,8 @@ function Input({
     ...props
 }) {
     const className = classnames(style["input"], {
-        [style["with-icon"]]: icon
+        [style["with-icon"]]: icon,
+        [style["with-symbol"]]: symbol
     });
 
     const messageClassName = classnames([style["hint"]], {
