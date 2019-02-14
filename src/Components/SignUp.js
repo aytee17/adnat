@@ -23,7 +23,7 @@ function InnerForm({
 }) {
     return (
         <form onSubmit={handleSubmit}>
-            <div className={style["heading"]}>Create an account.</div>
+            <div className={style["heading"]}>Create an account</div>
             <div className={style["container"]}>
                 <Input
                     name="name"
