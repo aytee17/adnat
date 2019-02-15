@@ -12,6 +12,7 @@ const storage = new SecureLS({ encodingType: "aes" });
 const channel = new BroadcastChannel("session");
 
 function App() {
+    // Check login state from local storage, and get + set session id if logged in
     const [loggedIn, setLoggedIn] = useState(() => {
         const alreadyIn = storage.get("loggedIn");
         if (alreadyIn === true) {
@@ -22,6 +23,7 @@ function App() {
         return false;
     });
 
+    // User not loaded yet
     const [user, setUser] = useState({
         name: "",
         email: "",
@@ -29,6 +31,7 @@ function App() {
         loaded: false
     });
 
+    // Fetch user if logged in
     useEffect(() => {
         if (loggedIn) {
             api.get("/users/me").then(response => {
@@ -37,6 +40,7 @@ function App() {
         }
     }, [loggedIn]);
 
+    // Listen for login and logout from other browsing contexts
     useEffect(() => {
         channel.onmessage = ({ data }) => {
             const { type, payload } = data;
@@ -52,9 +56,13 @@ function App() {
         return () => channel.close();
     }, []);
 
+    /**
+     * @param selfInitiated set to false if called in response to a broadcast message
+     **/
     function login(sessionID, selfInitiated) {
         setAuth(sessionID);
         setLoggedIn(true);
+
         if (selfInitiated === true || selfInitiated === undefined) {
             storage.set("sessionID", sessionID);
             storage.set("loggedIn", true);
