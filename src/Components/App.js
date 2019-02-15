@@ -25,7 +25,8 @@ function App() {
     const [user, setUser] = useState({
         name: "",
         email: "",
-        organisationId: undefined
+        organisationId: null,
+        loaded: false
     });
 
     useEffect(() => {
@@ -39,7 +40,6 @@ function App() {
     useEffect(() => {
         channel.onmessage = ({ data }) => {
             const { type, payload } = data;
-            console.log(data);
             switch (type) {
                 case "LOGIN":
                     login(payload, false);
