@@ -4,3 +4,20 @@ $main-color-light: #75c5f4;
 $main-color: #4eb5f1;
 $main-color-dark: #47a5dc;
 $main-color-darker: #4095c6;
+
+@mixin hidden-form($radius: 3px, $time: 0.2s) {
+    visibility: hidden;
+    opacity: 0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    border: 1px solid #dfdfdf;
+    border-radius: $radius;
+    background-color: #fff;
+    transition: $time ease-in;
+}
+
+@mixin show-hidden-form($downBy: 5px, $time: 0.15s) {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY($downBy);
+    transition: $time ease-out;
+}
