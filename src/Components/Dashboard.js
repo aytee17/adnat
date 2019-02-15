@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import style from "./Dashboard.scss";
-import classnames from "classnames";
 import { api } from "../utils/api";
 import mapKeys from "lodash.mapkeys";
 
 import Button from "./Controls/Button";
-import CreateOrgForm from "./Forms/CreateOrgForm";
+import OrgForm from "./Forms/OrgForm";
+import { EditIcon } from "./Icons/Icons";
 
 function Dashboard({ user, setUser }) {
     const { name, organisationId } = user;
@@ -45,15 +45,21 @@ function Dashboard({ user, setUser }) {
                         >
                             Create Organisation
                         </Button>
-                        <CreateOrgForm
-                            formOpened={formOpened}
-                            setUser={setUser}
-                        />
+                        <OrgForm formOpened={formOpened} setUser={setUser} />
                     </div>
                 </div>
             ) : (
-                <div>
-                    <h2>{myOrg.name}</h2>
+                <div className={style["header"]}>
+                    <div className={style["org-name"]}>
+                        {myOrg.name}
+                        <div className={style["rate"]}>
+                            {`Rate: $${myOrg.hourlyRate} / hour`}
+                        </div>
+                    </div>
+                    <div className={style["controls"]}>
+                        <div>Edit</div>
+                    </div>
+                    <div className={style["controls"]}>Leave</div>
                 </div>
             )}
         </div>
