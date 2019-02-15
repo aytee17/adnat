@@ -1,5 +1,5 @@
 import React from "react";
-import style from "./CreateOrgForm.scss";
+import style from "./OrgForm.scss";
 import classnames from "classnames";
 import { withFormik } from "formik";
 import { object, string, number } from "yup";
@@ -95,7 +95,7 @@ const InnerForm = ({
     );
 };
 
-const CreateOrgForm = withFormik({
+const OrgForm = withFormik({
     mapPropsToValues: () => ({
         name: "",
         hourlyRate: ""
@@ -122,4 +122,4 @@ const CreateOrgForm = withFormik({
     }
 })(InnerForm);
 
-export default CreateOrgForm;
+export default OrgForm;
