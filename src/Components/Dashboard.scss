@@ -1,7 +1,7 @@
 .container {
     width: 80%;
     margin: 0 auto;
-    margin-top: 50px;
+    margin-top: 40px;
 }
 
 .greeting {
@@ -11,4 +11,29 @@
 
 .create-form {
     margin-top: 15px;
+}
+
+.header {
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+}
+
+.org-name {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.rate {
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 2px;
+}
+
+.controls {
+    margin-left: 25px;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
 }
