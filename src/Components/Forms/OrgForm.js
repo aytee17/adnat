@@ -4,23 +4,11 @@ import classnames from "classnames";
 import { withFormik } from "formik";
 import { object, string, number } from "yup";
 import { api } from "../../utils/api";
+import { CREATE, UPDATE } from "../../enums/enum";
 
 import Input from "../Controls/Input";
 import Button from "../Controls/Button";
-
-function fixRateInput(value) {
-    if (value === "") return value;
-
-    const second = value.split(".")[1];
-    if (second === undefined) {
-        value = `${value}.00`;
-    } else if (second === "") {
-        value = `${value}00`;
-    } else if (second.length === 1) {
-        value = `${value}0`;
-    }
-    return value;
-}
+import fixRate from "../../utils/fixRate";
 
 const InnerForm = ({
     formOpened,
@@ -31,7 +19,8 @@ const InnerForm = ({
     handleChange,
     handleBlur,
     setFieldValue,
-    isSubmitting
+    isSubmitting,
+    mode
 }) => {
     const className = classnames(style["form"], {
         [style["show"]]: formOpened
@@ -47,8 +36,20 @@ const InnerForm = ({
     function onHourlyRateBlur(event) {
         handleBlur(event);
         let { value } = event.target;
-        value = fixRateInput(value);
+        value = fixRate(value);
         setFieldValue("hourlyRate", value);
+    }
+
+    let sumbitTitle;
+    switch (mode) {
+        case CREATE:
+            sumbitTitle = "Create and Join";
+            break;
+        case UPDATE:
+            sumbitTitle = "Update";
+            break;
+        default:
+            sumbitTitle = "";
     }
 
     return (
@@ -88,7 +89,7 @@ const InnerForm = ({
                     type="submit"
                     formNoValidate
                 >
-                    Create and Join
+                    {sumbitTitle}
                 </Button>
             </div>
         </form>
@@ -96,29 +97,70 @@ const InnerForm = ({
 };
 
 const OrgForm = withFormik({
-    mapPropsToValues: () => ({
-        name: "",
-        hourlyRate: ""
-    }),
+    mapPropsToValues: ({ org }) => {
+        let name, hourlyRate;
+        if (org) {
+            name = org.name;
+            hourlyRate = org.hourlyRate;
+        } else {
+            name = "";
+            hourlyRate = "";
+        }
+        return { name, hourlyRate };
+    },
     validationSchema: object().shape({
         name: string().required("A name is required"),
         hourlyRate: number().required("An hourly rate is required")
     }),
     handleSubmit: (values, { props, setSubmitting, setFieldValue }) => {
-        const hourlyRate = fixRateInput(values.hourlyRate);
+        const hourlyRate = fixRate(values.hourlyRate);
         setFieldValue("hourlyRate", hourlyRate);
         const transformedValues = {
             ...values,
             hourlyRate
         };
-        api.post("/organisations/create_join", transformedValues)
-            .then(response => {
-                setSubmitting(false);
-                return api.get("users/me");
-            })
-            .then(response => {
-                props.setUser(response.data);
-            });
+
+        if (props.mode === CREATE) {
+            api.post("/organisations/create_join", transformedValues).then(
+                response => {
+                    setSubmitting(false);
+                    const organisation = response.data;
+                    const { id } = organisation;
+                    const {
+                        organisations,
+                        setOrganisations,
+                        user,
+                        setUser
+                    } = props;
+                    setOrganisations({
+                        ...organisations,
+                        [id]: organisation
+                    });
+                    setUser({
+                        ...user,
+                        organisationID: id
+                    });
+                }
+            );
+        }
+
+        if (props.mode === UPDATE) {
+            api.put(`/organisations/${props.org.id}`, transformedValues).then(
+                response => {
+                    setSubmitting(false);
+                    if (response.data === "OK") {
+                        const { id } = props.org;
+                        const { organisations, setOrganisations } = props;
+                        const newList = {
+                            ...organisations,
+                            [id]: { id, ...transformedValues }
+                        };
+                        setOrganisations(newList);
+                        props.toggleForm();
+                    }
+                }
+            );
+        }
     }
 })(InnerForm);
 

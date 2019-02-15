@@ -5,26 +5,44 @@ import mapKeys from "lodash.mapkeys";
 
 import Button from "./Controls/Button";
 import OrgForm from "./Forms/OrgForm";
-import { EditIcon } from "./Icons/Icons";
+import { CREATE, UPDATE } from "../enums/enum";
+import fixRate from "../utils/fixRate";
 
 function Dashboard({ user, setUser }) {
     const { name, organisationId } = user;
 
-    const [formOpened, setFormOpened] = useState(false);
+    const [createFormOpened, setCreateFormOpened] = useState(false);
+    const [updateFormOpened, setUpdateFormOpened] = useState(false);
     const [organisations, setOrganisations] = useState({ loaded: false });
 
+    // Fetch organisations
     useEffect(() => {
         api.get("/organisations").then(response => {
-            setOrganisations(mapKeys(response.data, "id"));
+            setOrganisations(transformOrgData(response.data));
         });
-    }, [user]);
+    }, []);
 
-    function toggleForm() {
-        setFormOpened(!formOpened);
+    function transformOrgData(orgs) {
+        orgs = orgs.map(org => ({
+            ...org,
+            hourlyRate: fixRate(org.hourlyRate)
+        }));
+        orgs = mapKeys(orgs, "id");
+        return orgs;
+    }
+
+    function toggleCreateForm() {
+        setCreateFormOpened(!createFormOpened);
+    }
+
+    function toggleUpdateForm() {
+        setUpdateFormOpened(!updateFormOpened);
     }
 
     const myOrg = organisations[organisationId];
+    console.log(myOrg);
 
+    // Don't render if user or orgs not loaded yet
     if (user.loaded === false || organisations.loaded === false) {
         return <div />;
     }
@@ -40,27 +58,44 @@ function Dashboard({ user, setUser }) {
                     <div className={style["create-form"]}>
                         <Button
                             style={{ width: "200px" }}
-                            active={formOpened}
-                            onClick={toggleForm}
+                            active={createFormOpened}
+                            onClick={toggleCreateForm}
                         >
                             Create Organisation
                         </Button>
-                        <OrgForm formOpened={formOpened} setUser={setUser} />
+                        <OrgForm
+                            formOpened={createFormOpened}
+                            user={user}
+                            setUser={setUser}
+                            organisations={organisations}
+                            setOrganisations={setOrganisations}
+                            mode={CREATE}
+                        />
                     </div>
                 </div>
             ) : (
-                <div className={style["header"]}>
-                    <div className={style["org-name"]}>
-                        {myOrg.name}
-                        <div className={style["rate"]}>
-                            {`Rate: $${myOrg.hourlyRate} / hour`}
+                <>
+                    <div className={style["header"]}>
+                        <div className={style["org-name"]}>
+                            {myOrg.name}
+                            <div className={style["rate"]}>
+                                {`Rate: $${myOrg.hourlyRate} / hour`}
+                            </div>
                         </div>
+                        <div className={style["controls"]}>
+                            <div onClick={toggleUpdateForm}>Edit</div>
+                        </div>
+                        <div className={style["controls"]}>Leave</div>
                     </div>
-                    <div className={style["controls"]}>
-                        <div>Edit</div>
-                    </div>
-                    <div className={style["controls"]}>Leave</div>
-                </div>
+                    <OrgForm
+                        formOpened={updateFormOpened}
+                        toggleForm={toggleUpdateForm}
+                        org={myOrg}
+                        organisations={organisations}
+                        setOrganisations={setOrganisations}
+                        mode={UPDATE}
+                    />
+                </>
             )}
         </div>
     );
