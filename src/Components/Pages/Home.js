@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import style from "./Home.scss";
 
-import Logo from "./Logo";
-import Login from "./Forms/Login";
-import SignUp from "./Forms/SignUp";
+import Logo from "../Logo";
+import Login from "../Forms/Login";
+import SignUp from "../Forms/SignUp";
 
 import { Link } from "@reach/router";
 

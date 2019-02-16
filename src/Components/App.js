@@ -4,8 +4,8 @@ import { Router } from "@reach/router";
 import { hot } from "react-hot-loader";
 import { api, setAuth } from "../utils/api";
 
-import Home from "./Home";
-import Dashboard from "./Dashboard";
+import Home from "./Pages/Home";
+import Dashboard from "./Pages/Dashboard";
 import NavBar from "./NavBar";
 
 const storage = new SecureLS({ encodingType: "aes" });

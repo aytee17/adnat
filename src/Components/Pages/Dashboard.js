@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import style from "./Dashboard.scss";
 import classnames from "classnames";
-import { api } from "../utils/api";
+import { api } from "../../utils/api";
 import mapKeys from "lodash.mapkeys";
 
-import Button from "./Controls/Button";
-import OrgForm from "./Forms/OrgForm";
-import useClickOutside from "./Hooks/useClickOutside";
-import { CREATE, UPDATE } from "../enums/enum";
-import fixRate from "../utils/fixRate";
+import Button from "../Controls/Button";
+import OrgForm from "../Forms/OrgForm";
+import useClickOutside from "../Hooks/useClickOutside";
+import { CREATE, UPDATE } from "../../enums/enum";
+import fixRate from "../../utils/fixRate";
 
 function Dashboard({ user, setUser }) {
     const [createFormRef, createFormOpened, toggleCreateForm] = useClickOutside(
