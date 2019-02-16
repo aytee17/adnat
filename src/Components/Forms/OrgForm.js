@@ -62,7 +62,12 @@ const OrgForm = React.forwardRef(
                                 const { id } = organisation;
                                 setOrganisations({
                                     ...organisations,
-                                    [id]: organisation
+                                    [id]: {
+                                        ...organisation,
+                                        hourlyRate: fixRate(
+                                            organisation.hourlyRate
+                                        )
+                                    }
                                 });
                                 setUser({
                                     ...user,
