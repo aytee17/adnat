@@ -144,7 +144,11 @@ const OrgForm = withFormik({
             );
         }
 
-        if (props.mode === UPDATE) {
+        const modified =
+            values.name !== props.org.name ||
+            hourlyRate !== props.org.hourlyRate;
+
+        if (props.mode === UPDATE && modified) {
             api.put(`/organisations/${props.org.id}`, transformedValues).then(
                 response => {
                     setSubmitting(false);
@@ -160,6 +164,9 @@ const OrgForm = withFormik({
                     }
                 }
             );
+        } else {
+            setSubmitting(false);
+            props.toggleForm();
         }
     }
 })(InnerForm);
