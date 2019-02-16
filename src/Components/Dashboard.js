@@ -6,6 +6,7 @@ import mapKeys from "lodash.mapkeys";
 
 import Button from "./Controls/Button";
 import OrgForm from "./Forms/OrgForm";
+import useClickOutside from "./Hooks/useClickOutside";
 import { CREATE, UPDATE } from "../enums/enum";
 import fixRate from "../utils/fixRate";
 
@@ -13,8 +14,12 @@ function Dashboard({ user, setUser }) {
     const { name, organisationId } = user;
 
     const [createFormOpened, setCreateFormOpened] = useState(false);
-    const [updateFormOpened, setUpdateFormOpened] = useState(false);
+    // const [updateFormOpened, setUpdateFormOpened] = useState(false);
     const [organisations, setOrganisations] = useState({ loaded: false });
+
+    const [updateFormRef, updateFormOpened, toggleUpdateForm] = useClickOutside(
+        false
+    );
 
     // Fetch organisations
     useEffect(() => {
@@ -36,12 +41,11 @@ function Dashboard({ user, setUser }) {
         setCreateFormOpened(!createFormOpened);
     }
 
-    function toggleUpdateForm() {
-        setUpdateFormOpened(!updateFormOpened);
-    }
+    //     function toggleUpdateForm() {
+    //     setUpdateFormOpened(!updateFormOpened);
+    // }
 
     const myOrg = organisations[organisationId];
-    console.log(myOrg);
 
     // Don't render if user or orgs not loaded yet
     if (user.loaded === false || organisations.loaded === false) {
@@ -96,6 +100,7 @@ function Dashboard({ user, setUser }) {
                         <div className={style["controls"]}>Leave</div>
                     </div>
                     <OrgForm
+                        ref={updateFormRef}
                         formOpened={updateFormOpened}
                         toggleForm={toggleUpdateForm}
                         org={myOrg}
