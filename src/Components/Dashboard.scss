@@ -1,3 +1,5 @@
+@import "../variables.scss";
+
 .container {
     width: 80%;
     margin: 0 auto;
@@ -30,10 +32,29 @@
     margin-top: 2px;
 }
 
+@mixin active {
+    background-color: $main-color;
+    color: #fff;
+}
+
 .controls {
     margin-left: 25px;
     font-size: 15px;
     cursor: pointer;
     display: flex;
     align-items: center;
+    padding: 5px;
+    border-radius: 2px;
+
+    &:hover {
+        background-color: $main-color-lighter;
+    }
+
+    &:active {
+        @include active;
+    }
+
+    &.active {
+        @include active;
+    }
 }

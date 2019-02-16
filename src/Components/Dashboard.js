@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import style from "./Dashboard.scss";
+import classnames from "classnames";
 import { api } from "../utils/api";
 import mapKeys from "lodash.mapkeys";
 
@@ -46,6 +47,10 @@ function Dashboard({ user, setUser }) {
     if (user.loaded === false || organisations.loaded === false) {
         return <div />;
     }
+
+    const classNameForEdit = classnames(style["controls"], {
+        [style["active"]]: updateFormOpened
+    });
     return (
         <div className={style["container"]}>
             <div className={style["greeting"]}>Hi, {name}!</div>
@@ -82,7 +87,7 @@ function Dashboard({ user, setUser }) {
                                 {`Rate: $${myOrg.hourlyRate} / hour`}
                             </div>
                         </div>
-                        <div className={style["controls"]}>
+                        <div className={classNameForEdit}>
                             <div onClick={toggleUpdateForm}>Edit</div>
                         </div>
                         <div className={style["controls"]}>Leave</div>
