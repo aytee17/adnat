@@ -11,17 +11,14 @@ import { CREATE, UPDATE } from "../enums/enum";
 import fixRate from "../utils/fixRate";
 
 function Dashboard({ user, setUser }) {
-    const { name, organisationId } = user;
-
-    const [createFormOpened, setCreateFormOpened] = useState(false);
-    // const [updateFormOpened, setUpdateFormOpened] = useState(false);
-    const [organisations, setOrganisations] = useState({ loaded: false });
-
+    const [createFormRef, createFormOpened, toggleCreateForm] = useClickOutside(
+        false
+    );
     const [updateFormRef, updateFormOpened, toggleUpdateForm] = useClickOutside(
         false
     );
 
-    // Fetch organisations
+    const [organisations, setOrganisations] = useState({ loaded: false });
     useEffect(() => {
         api.get("/organisations").then(response => {
             setOrganisations(transformOrgData(response.data));
@@ -37,20 +34,22 @@ function Dashboard({ user, setUser }) {
         return orgs;
     }
 
-    function toggleCreateForm() {
-        setCreateFormOpened(!createFormOpened);
+    function leaveOrg() {
+        api.post("/organisations/leave").then(response => {
+            console.log("leave", { response });
+            if (response.data === "OK") {
+                setUser({ ...user, organisationId: null });
+            }
+        });
     }
-
-    //     function toggleUpdateForm() {
-    //     setUpdateFormOpened(!updateFormOpened);
-    // }
-
-    const myOrg = organisations[organisationId];
 
     // Don't render if user or orgs not loaded yet
     if (user.loaded === false || organisations.loaded === false) {
         return <div />;
     }
+
+    const { name, organisationId } = user;
+    const myOrg = organisations[organisationId];
 
     const classNameForEdit = classnames(style["controls"], {
         [style["active"]]: updateFormOpened
@@ -73,7 +72,9 @@ function Dashboard({ user, setUser }) {
                             Create Organisation
                         </Button>
                         <OrgForm
+                            ref={createFormRef}
                             formOpened={createFormOpened}
+                            toggleForm={toggleCreateForm}
                             user={user}
                             setUser={setUser}
                             organisations={organisations}
@@ -97,7 +98,9 @@ function Dashboard({ user, setUser }) {
                         >
                             <div>{`Edit${updateFormOpened ? "ing" : ""}`}</div>
                         </div>
-                        <div className={style["controls"]}>Leave</div>
+                        <div className={style["controls"]} onClick={leaveOrg}>
+                            Leave
+                        </div>
                     </div>
                     <OrgForm
                         ref={updateFormRef}
