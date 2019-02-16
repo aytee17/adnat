@@ -88,7 +88,9 @@ function Dashboard({ user, setUser }) {
                             </div>
                         </div>
                         <div className={classNameForEdit}>
-                            <div onClick={toggleUpdateForm}>Edit</div>
+                            <div onClick={toggleUpdateForm}>{`Edit${
+                                updateFormOpened ? "ing" : ""
+                            }`}</div>
                         </div>
                         <div className={style["controls"]}>Leave</div>
                     </div>
