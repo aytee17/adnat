@@ -13,22 +13,29 @@ function Input({
     invalid,
     errorMessage,
     correct,
+    small,
     children,
     ...props
 }) {
-    const className = classnames(style["input"], {
+    const inputClassName = classnames(style["input"], {
         [style["with-icon"]]: icon,
-        [style["with-symbol"]]: symbol
+        [style["with-symbol"]]: symbol,
+        [style["small"]]: small
     });
 
-    const messageClassName = classnames([style["hint"]], {
+    const messageClassName = classnames(style["hint"], {
         [style["error"]]: errorMessage
+    });
+
+    const labelClassName = classnames({
+        [style["label"]]: !small,
+        [style["small-label"]]: small
     });
 
     return (
         <div className={style["container"]}>
             <input
-                className={className}
+                className={inputClassName}
                 placeholder={label}
                 name={name}
                 {...props}
@@ -38,7 +45,7 @@ function Input({
                     <TickIcon />
                 </span>
             )}
-            <div className={style["label"]}>
+            <div className={labelClassName}>
                 <label htmlFor={label}>{label}</label>
             </div>
             {children}

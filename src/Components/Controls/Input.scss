@@ -38,12 +38,20 @@ $border-grey: #c3c3c3;
         display: none;
     }
 
+    &[value=""] ~ .small-label {
+        display: none;
+    }
+
     &.with-icon {
         padding-left: 36px;
     }
 
     &.with-symbol {
         padding-left: 16px;
+    }
+
+    &.small {
+        height: 30px;
     }
 }
 
@@ -64,11 +72,21 @@ $border-grey: #c3c3c3;
     }
 }
 
-.label {
-    position: absolute;
-    animation: slideUp 0.15s ease-in;
-    transform: translateY(-58px);
+@mixin label($length) {
+    fill: currentColor;
+    transition: 0.1s ease-in;
+    pointer-events: none;
+    left: 0.5rem;
     font-size: 13px;
+    transform: translateY($length);
+}
+
+.label {
+    @include label(-58px);
+}
+
+.small-label {
+    @include label(-48px);
 }
 
 @keyframes slideUp {
