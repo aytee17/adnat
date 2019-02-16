@@ -12,6 +12,15 @@
     left: 0.5rem;
 }
 
+.icon-small {
+    @include icon;
+    top: 4px;
+    fill: currentColor;
+    transition: 0.1s ease-in;
+    pointer-events: none;
+    left: 0.5rem;
+}
+
 .icon-right {
     @include icon;
     right: 0.625rem;
