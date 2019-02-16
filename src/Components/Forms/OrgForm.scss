@@ -2,7 +2,7 @@
 
 .form {
     margin-top: 15px;
-    grid-template-rows: 2fr 2fr 1fr;
+    grid-template-rows: 2fr 2fr 0.5fr 1fr;
     padding: 15px;
     display: grid;
     height: 240px;
@@ -20,4 +20,10 @@
     top: 11px;
     left: 7px;
     color: #333;
+}
+
+.error {
+    font-size: 14px;
+    color: $error-red;
+    height: 16px;
 }

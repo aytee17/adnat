@@ -35,11 +35,15 @@ const OrgForm = React.forwardRef(
         return (
             <Formik
                 initialValues={{ name, hourlyRate }}
+                initialStatus={{ error: "" }}
                 validationSchema={object().shape({
                     name: string().required("A name is required"),
                     hourlyRate: number().required("An hourly rate is required")
                 })}
-                onSubmit={(values, { setSubmitting, setFieldValue }) => {
+                onSubmit={(
+                    values,
+                    { setSubmitting, setFieldValue, setStatus }
+                ) => {
                     const hourlyRate = fixRate(values.hourlyRate);
                     setFieldValue("hourlyRate", hourlyRate);
                     const transformedValues = {
@@ -51,41 +55,48 @@ const OrgForm = React.forwardRef(
                         api.post(
                             "/organisations/create_join",
                             transformedValues
-                        ).then(response => {
-                            setSubmitting(false);
-                            const organisation = response.data;
-                            const { id } = organisation;
-                            setOrganisations({
-                                ...organisations,
-                                [id]: organisation
-                            });
-                            setUser({
-                                ...user,
-                                organisationID: id
-                            });
-                        });
-                    }
-
-                    const modified =
-                        values.name !== org.name ||
-                        hourlyRate !== org.hourlyRate;
-
-                    if (mode === UPDATE && modified) {
-                        api.put(
-                            `/organisations/${org.id}`,
-                            transformedValues
-                        ).then(response => {
-                            setSubmitting(false);
-                            if (response.data === "OK") {
-                                const { id } = org;
-                                const newList = {
+                        )
+                            .then(response => {
+                                setSubmitting(false);
+                                const organisation = response.data;
+                                const { id } = organisation;
+                                setOrganisations({
                                     ...organisations,
-                                    [id]: { id, ...transformedValues }
-                                };
-                                setOrganisations(newList);
+                                    [id]: organisation
+                                });
+                                setUser({
+                                    ...user,
+                                    organisationId: id
+                                });
                                 toggleForm();
-                            }
-                        });
+                            })
+                            .catch(error => {
+                                setSubmitting(false);
+                                setStatus({ error: error.response.data.error });
+                            });
+                    } else if (mode === UPDATE) {
+                        const modified =
+                            values.name !== org.name ||
+                            hourlyRate !== org.hourlyRate;
+                        if (modified) {
+                            api.put(
+                                `/organisations/${org.id}`,
+                                transformedValues
+                            )
+                                .then(response => {
+                                    setSubmitting(false);
+                                    if (response.data === "OK") {
+                                        const { id } = org;
+                                        const newList = {
+                                            ...organisations,
+                                            [id]: { id, ...transformedValues }
+                                        };
+                                        setOrganisations(newList);
+                                        toggleForm();
+                                    }
+                                })
+                                .catch(error => {});
+                        }
                     } else {
                         setSubmitting(false);
                         toggleForm();
@@ -99,7 +110,8 @@ const OrgForm = React.forwardRef(
                     handleChange,
                     handleBlur,
                     setFieldValue,
-                    isSubmitting
+                    isSubmitting,
+                    status
                 }) => {
                     const className = classnames(style["form"], {
                         [style["show"]]: formOpened
@@ -162,6 +174,9 @@ const OrgForm = React.forwardRef(
                                 >
                                     <div className={style["symbol"]}>$</div>
                                 </Input>
+                                <div className={style["error"]}>
+                                    {status.error}
+                                </div>
                                 <Button
                                     style={{
                                         width: "180px",
