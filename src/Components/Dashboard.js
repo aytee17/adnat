@@ -87,10 +87,11 @@ function Dashboard({ user, setUser }) {
                                 {`Rate: $${myOrg.hourlyRate} / hour`}
                             </div>
                         </div>
-                        <div className={classNameForEdit}>
-                            <div onClick={toggleUpdateForm}>{`Edit${
-                                updateFormOpened ? "ing" : ""
-                            }`}</div>
+                        <div
+                            className={classNameForEdit}
+                            onClick={toggleUpdateForm}
+                        >
+                            <div>{`Edit${updateFormOpened ? "ing" : ""}`}</div>
                         </div>
                         <div className={style["controls"]}>Leave</div>
                     </div>
