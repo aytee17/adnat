@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import style from "./OrgList.scss";
 import Input from "../Controls/Input";
+import { FilterIcon } from "../Icons/Icons";
 
 function OrgList({ organisations }) {
     const [filter, setFilter] = useState("");
@@ -28,12 +29,15 @@ function OrgList({ organisations }) {
             <div className={style["header"]}>
                 <div>Organisations</div>
                 <Input
-                    style={{ height: "30px" }}
                     name="filter"
                     label="Filter"
                     onChange={e => setFilter(e.target.value)}
                     value={filter}
-                />
+                    icon={true}
+                    small={true}
+                >
+                    <FilterIcon />
+                </Input>
             </div>
             <div className={style["list"]}>
                 {noResults ? (
