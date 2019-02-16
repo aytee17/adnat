@@ -4,11 +4,11 @@ import style from "./SignUp.scss";
 import { withFormik } from "formik";
 import { object, string } from "yup";
 
-import Input from "./Controls/Input";
-import { VisibilityIcon } from "./Icons/Icons";
-import Button from "./Controls/Button";
+import Input from "../Controls/Input";
+import { VisibilityIcon } from "../Icons/Icons";
+import Button from "../Controls/Button";
 
-import { api } from "../utils/api";
+import { api } from "../../utils/api";
 
 function InnerForm({
     values,

@@ -4,11 +4,11 @@ import style from "./Login.scss";
 import { withFormik } from "formik";
 import { object, string, bool } from "yup";
 
-import Input from "./Controls/Input";
-import { MailIcon, LockIcon, VisibilityIcon } from "./Icons/Icons";
-import Button from "./Controls/Button";
+import Input from "../Controls/Input";
+import { MailIcon, LockIcon, VisibilityIcon } from "../Icons/Icons";
+import Button from "../Controls/Button";
+import { api } from "../../utils/api";
 import { Link } from "@reach/router";
-import { api } from "../utils/api";
 
 function InnerForm({
     values,
