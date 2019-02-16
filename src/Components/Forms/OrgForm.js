@@ -100,11 +100,16 @@ const OrgForm = React.forwardRef(
                                         toggleForm();
                                     }
                                 })
-                                .catch(error => {});
+                                .catch(error => {
+                                    setSubmitting(false);
+                                    setStatus({
+                                        error: error.response.data.error
+                                    });
+                                });
+                        } else {
+                            setSubmitting(false);
+                            toggleForm();
                         }
-                    } else {
-                        setSubmitting(false);
-                        toggleForm();
                     }
                 }}
                 render={({
