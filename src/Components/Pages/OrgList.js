@@ -15,6 +15,14 @@ function OrgList({ organisations }) {
             orgs.push(org);
         }
     }
+
+    const noResults =
+        filter !== "" &&
+        Object.keys(organisations).length > 0 &&
+        orgs.length === 0;
+
+    const noOrganisations = organisations.length === 0;
+
     return (
         <div className={style["container"]}>
             <div className={style["header"]}>
@@ -28,13 +36,17 @@ function OrgList({ organisations }) {
                 />
             </div>
             <div className={style["list"]}>
-                {orgs.map((org, index) => {
-                    return (
-                        <div key={index} className={style["item"]}>
-                            {org.name}
-                        </div>
-                    );
-                })}
+                {noResults ? (
+                    <div className={style["no-results"]}>No results</div>
+                ) : (
+                    orgs.map((org, index) => {
+                        return (
+                            <div key={index} className={style["item"]}>
+                                {org.name}
+                            </div>
+                        );
+                    })
+                )}
             </div>
         </div>
     );
