@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 
-function useClickOutside() {
-    const [open, setOpen] = useState(false);
+function useClickOutside(initial) {
+    const [open, setOpen] = useState(initial);
     const ref = useRef();
 
     useEffect(() => {
