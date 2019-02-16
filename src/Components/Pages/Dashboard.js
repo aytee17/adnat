@@ -4,6 +4,7 @@ import classnames from "classnames";
 import { api } from "../../utils/api";
 import mapKeys from "lodash.mapkeys";
 
+import OrgList from "./OrgList";
 import Button from "../Controls/Button";
 import OrgForm from "../Forms/OrgForm";
 import useClickOutside from "../Hooks/useClickOutside";
@@ -63,24 +64,27 @@ function Dashboard({ user, setUser }) {
                         You aren't a member of any organisations. Join an
                         existing one or create a new one.
                     </div>
-                    <div className={style["create-form"]}>
-                        <Button
-                            style={{ width: "200px" }}
-                            active={createFormOpened}
-                            onClick={toggleCreateForm}
-                        >
-                            Create Organisation
-                        </Button>
-                        <OrgForm
-                            ref={createFormRef}
-                            formOpened={createFormOpened}
-                            toggleForm={toggleCreateForm}
-                            user={user}
-                            setUser={setUser}
-                            organisations={organisations}
-                            setOrganisations={setOrganisations}
-                            mode={CREATE}
-                        />
+                    <div className={style["horizontal"]}>
+                        <OrgList organisations={organisations} />
+                        <div className={style["create-form"]}>
+                            <Button
+                                style={{ width: "200px" }}
+                                active={createFormOpened}
+                                onClick={toggleCreateForm}
+                            >
+                                Create Organisation
+                            </Button>
+                            <OrgForm
+                                ref={createFormRef}
+                                formOpened={createFormOpened}
+                                toggleForm={toggleCreateForm}
+                                user={user}
+                                setUser={setUser}
+                                organisations={organisations}
+                                setOrganisations={setOrganisations}
+                                mode={CREATE}
+                            />
+                        </div>
                     </div>
                 </div>
             ) : (

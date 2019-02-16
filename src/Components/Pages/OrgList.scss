@@ -1,0 +1,84 @@
+@import "../../variables.scss";
+
+.container {
+    margin-top: 20px;
+    width: 400px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.list {
+    height: calc(100vh - 250px);
+    overflow: scroll;
+    border: {
+        top: 1px solid $grey;
+        bottom: 1px solid $grey;
+    }
+
+    font-weight: 400;
+    font-size: 15px;
+    display: block;
+    width: 100%;
+    overflow: scroll;
+    position: relative;
+    z-index: 1;
+
+    background: #fcfcfc no-repeat;
+    background-image: radial-gradient(
+            farthest-side at 50% 0,
+            rgba(0, 0, 0, 0.2),
+            rgba(0, 0, 0, 0)
+        ),
+        radial-gradient(
+            farthest-side at 50% 100%,
+            rgba(0, 0, 0, 0.2),
+            rgba(0, 0, 0, 0)
+        );
+    background-position: 0 0, 0 100%;
+    background-size: 100% 14px;
+}
+
+.list:before,
+.list:after {
+    content: "";
+    position: relative;
+    z-index: -1;
+    display: block;
+    height: 30px;
+    margin: 0 0 -30px;
+    background: linear-gradient(
+        to bottom,
+        #fff,
+        #fff 30%,
+        rgba(255, 255, 255, 0)
+    );
+}
+
+.list:after {
+    margin: -30px 0 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0),
+        #fff 70%,
+        #fff
+    );
+}
+
+.item {
+    margin: 5px 0 5px 0;
+    padding: 5px;
+    transition: 0.1s ease-in;
+    border-radius: 3px;
+
+    &:hover {
+        background-color: $main-color-lighter;
+        transition: 0.15s ease-out;
+    }
+}
