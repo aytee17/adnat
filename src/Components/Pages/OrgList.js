@@ -6,9 +6,15 @@ function OrgList({ organisations }) {
     const [filter, setFilter] = useState("");
     const orgs = [];
     for (let key in organisations) {
-        orgs.push(organisations[key]);
+        let org = organisations[key];
+        let containsFilter =
+            org.name.toLowerCase().indexOf(filter.toLowerCase()) >= 0;
+        if (filter !== "" && containsFilter) {
+            orgs.push(org);
+        } else if (filter === "") {
+            orgs.push(org);
+        }
     }
-    console.log(filter);
     return (
         <div className={style["container"]}>
             <div className={style["header"]}>
