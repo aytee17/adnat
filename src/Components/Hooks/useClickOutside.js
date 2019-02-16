@@ -12,9 +12,12 @@ function useClickOutside(initial) {
     }, []);
 
     function handleClickOutside(event) {
-        const clickedNode = event.target;
-        if (!ref.current.contains(clickedNode)) {
-            close();
+        // only if ref has been assigned to
+        if (ref.current) {
+            const clickedNode = event.target;
+            if (!ref.current.contains(clickedNode)) {
+                close();
+            }
         }
     }
 
