@@ -1,40 +1,17 @@
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
 import style from "./MenuButton.scss";
 import classnames from "classnames";
 import { AccountIcon } from "./Icons/Icons";
 import { DownIcon } from "./Icons/Icons";
+import useClickOutside from "./Hooks/useClickOutside";
 
 export function MenuButton({ children }) {
-    const [open, setOpen] = useState(false);
-    const menuButton = useRef();
-
-    useEffect(() => {
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
-
-    function handleClickOutside(event) {
-        const clickedNode = event.target;
-        if (!menuButton.current.contains(clickedNode)) {
-            close();
-        }
-    }
-
-    function close() {
-        setOpen(false);
-    }
-
-    function toggle() {
-        setOpen(!open);
-    }
-
+    const [ref, open, toggle] = useClickOutside();
     const className = classnames(style["button"], {
         [style["open"]]: open
     });
     return (
-        <div className={className} onClick={toggle} ref={menuButton}>
+        <div className={className} onClick={toggle} ref={ref}>
             <AccountIcon />
             <DownIcon open={open} />
             <Menu open={open}>{children}</Menu>
