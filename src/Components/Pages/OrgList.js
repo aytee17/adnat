@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import style from "./OrgList.scss";
 import OrgForm from "../Forms/OrgForm";
 import Input from "../Controls/Input";
@@ -38,17 +38,19 @@ function OrgList({ organisations, setOrganisations, updateUser }) {
 
     const noOrganisations = organisations.length === 0;
 
+    const formRef = useRef();
+
     function renderList() {
         return orgs.map((org, index) => {
             if (org.id === editing) {
                 return (
                     <OrgForm
                         key={index}
+                        ref={formRef}
                         org={org}
                         mode={UPDATE}
                         resetEditing={() => {
                             setEditing(-1);
-                            console.log("reseting editing");
                         }}
                         formOpened={true}
                         organisations={organisations}

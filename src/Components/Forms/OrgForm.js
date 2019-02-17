@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import style from "./OrgForm.scss";
 import classnames from "classnames";
 import { Formik } from "formik";
@@ -32,6 +32,11 @@ const OrgForm = React.forwardRef(
             name = "";
             hourlyRate = "";
         }
+
+        useEffect(() => {
+            ref.current.scrollIntoView();
+        }, []);
+
         return (
             <Formik
                 initialValues={{ name, hourlyRate }}
