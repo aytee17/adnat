@@ -4,7 +4,6 @@ $border-grey: #c3c3c3;
 .container {
     position: relative;
     display: block;
-    margin-top: 20px;
 
     &:focus-within {
         color: $main-color;
@@ -72,24 +71,30 @@ $border-grey: #c3c3c3;
     }
 }
 
-@mixin label($length) {
+@mixin label($length: "small") {
     fill: currentColor;
     transition: 0.1s ease-in;
     pointer-events: none;
-    left: 0.5rem;
+    position: absolute;
     font-size: 13px;
-    transform: translateY($length);
+    animation: slide-up-#{$length} 0.15s ease-in;
+
+    @if $length == "small" {
+        transform: translateY(-48px);
+    } @else {
+        transform: translateY(-58px);
+    }
 }
 
 .label {
-    @include label(-58px);
+    @include label("big");
 }
 
 .small-label {
-    @include label(-48px);
+    @include label("small");
 }
 
-@keyframes slideUp {
+@keyframes slide-up-big {
     from {
         transform: translateY(-55px);
     }
@@ -99,11 +104,21 @@ $border-grey: #c3c3c3;
     }
 }
 
+@keyframes slide-up-small {
+    from {
+        transform: translateY(-45px);
+    }
+    to {
+        transform: translateY(-48px);
+    }
+}
+
 .hint {
     position: absolute;
     font-size: 13.5px;
     color: #b1b1b1;
     margin-top: 3px;
+    white-space: nowrap;
 
     &.error {
         color: red;
