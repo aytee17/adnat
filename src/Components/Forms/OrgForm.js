@@ -34,7 +34,9 @@ const OrgForm = React.forwardRef(
         }
 
         useEffect(() => {
-            ref.current.scrollIntoView();
+            ref.current.scrollIntoView({
+                behavior: "smooth"
+            });
         }, []);
 
         return (
