@@ -2,7 +2,7 @@ import React from "react";
 import style from "./Input.scss";
 import classnames from "classnames";
 
-import { TickIcon } from "../Icons/Icons";
+import { CrossIcon, TickIcon } from "../Icons/Icons";
 
 function Input({
     label,
@@ -13,6 +13,7 @@ function Input({
     invalid,
     errorMessage,
     correct,
+    clear,
     small,
     children,
     ...props
@@ -45,6 +46,7 @@ function Input({
                     <TickIcon />
                 </span>
             )}
+            {clear && <CrossIcon className={style["cross"]} onClick={clear} />}
             <div className={labelClassName}>
                 <label htmlFor={label}>{label}</label>
             </div>

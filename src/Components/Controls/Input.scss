@@ -40,6 +40,10 @@
         display: none;
     }
 
+    &[value=""] ~ .cross {
+        display: none;
+    }
+
     &.with-icon {
         padding-left: 36px;
     }
@@ -122,4 +126,12 @@
     &.error {
         color: red;
     }
+}
+
+.cross {
+    position: absolute;
+    opacity: 0.65;
+    right: 0.625rem;
+    cursor: pointer;
+    top: 7px;
 }
