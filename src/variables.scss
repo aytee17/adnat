@@ -17,9 +17,15 @@ $error-red: #f44336;
     transition: $time ease-in;
 }
 
-@mixin show-hidden-form($downBy: 5px, $time: 0.15s) {
+@mixin show-hidden-form($move: 5px, $time: 0.15s, $X: false) {
     visibility: visible;
     opacity: 1;
-    transform: translateY($downBy);
+
+    @if $X == true {
+        transform: translateX($move);
+    } @else {
+        transform: translateY($move);
+    }
+
     transition: $time ease-out;
 }
