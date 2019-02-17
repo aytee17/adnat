@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import style from "./OrgList.scss";
+import classnames from "classnames";
 import OrgForm from "../Forms/OrgForm";
 import Input from "../Controls/Input";
 import { FilterIcon } from "../Icons/Icons";
@@ -42,47 +43,57 @@ function OrgList({ organisations, setOrganisations, updateUser }) {
 
     function renderList() {
         return orgs.map(org => {
-            if (org.id === editing) {
-                return (
-                    <div
-                        key={org.id}
-                        style={{
-                            width: "350px",
-                            margin: "0 auto",
-                            marginBottom: "15px"
-                        }}
-                    >
-                        <OrgForm
-                            ref={formRef}
-                            org={org}
-                            mode={UPDATE}
-                            resetEditing={() => {
-                                setEditing(-1);
-                            }}
-                            formOpened={true}
-                            organisations={organisations}
-                            setOrganisations={setOrganisations}
-                        />
-                    </div>
-                );
-            }
+            const currentlyEditing = org.id === editing;
+            const itemClassName = classnames(style["item"], {
+                [style["editing"]]: currentlyEditing
+            });
+            const nameClassName = classnames(style["name"], {
+                [style["center-name"]]: currentlyEditing
+            });
             return (
-                <div key={org.id} className={style["item"]}>
-                    <div>{org.name}</div>
-                    <div className={style["controls"]}>
-                        <div
-                            className={style["control-item"]}
-                            onClick={updateEditing(org.id)}
-                        >
-                            Edit
-                        </div>
-                        <div
-                            className={style["control-item"]}
-                            onClick={join(org.id)}
-                        >
-                            Join
-                        </div>
+                <div key={org.id} className={itemClassName}>
+                    <div className={nameClassName}>
+                        {`${org.name} ${
+                            currentlyEditing ? ` | $${org.hourlyRate}/hour` : ""
+                        }`}
                     </div>
+                    {currentlyEditing ? (
+                        <div
+                            key={org.id}
+                            style={{
+                                width: "350px",
+                                margin: "0 auto",
+                                marginBottom: "15px"
+                            }}
+                        >
+                            <OrgForm
+                                ref={formRef}
+                                org={org}
+                                mode={UPDATE}
+                                resetEditing={() => {
+                                    setEditing(-1);
+                                }}
+                                formOpened={true}
+                                organisations={organisations}
+                                setOrganisations={setOrganisations}
+                            />
+                        </div>
+                    ) : (
+                        <div className={style["controls"]}>
+                            <div
+                                className={style["control-item"]}
+                                onClick={updateEditing(org.id)}
+                            >
+                                Edit
+                            </div>
+                            <div
+                                className={style["control-item"]}
+                                onClick={join(org.id)}
+                            >
+                                Join
+                            </div>
+                        </div>
+                    )}
                 </div>
             );
         });

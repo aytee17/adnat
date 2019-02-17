@@ -86,6 +86,22 @@
     &:hover > .controls {
         visibility: visible;
     }
+
+    &.editing {
+        display: block;
+        &:hover {
+            background-color: #fcfcfc;
+        }
+    }
+}
+
+.name {
+    white-space: nowrap;
+    &.center-name {
+        width: 200px;
+        margin: 0 auto;
+        text-align: center;
+    }
 }
 
 .no-results {
