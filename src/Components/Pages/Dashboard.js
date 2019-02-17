@@ -122,7 +122,9 @@ function Dashboard({ user, updateUser }) {
                             Leave
                         </div>
                     </div>
-                    <ShiftList />
+                    <div className={style["body"]}>
+                        <ShiftList />
+                    </div>
                 </>
             )}
         </div>
