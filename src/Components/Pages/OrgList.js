@@ -41,25 +41,33 @@ function OrgList({ organisations, setOrganisations, updateUser }) {
     const formRef = useRef();
 
     function renderList() {
-        return orgs.map((org, index) => {
+        return orgs.map(org => {
             if (org.id === editing) {
                 return (
-                    <OrgForm
-                        key={index}
-                        ref={formRef}
-                        org={org}
-                        mode={UPDATE}
-                        resetEditing={() => {
-                            setEditing(-1);
+                    <div
+                        key={org.id}
+                        style={{
+                            width: "350px",
+                            margin: "0 auto",
+                            marginBottom: "15px"
                         }}
-                        formOpened={true}
-                        organisations={organisations}
-                        setOrganisations={setOrganisations}
-                    />
+                    >
+                        <OrgForm
+                            ref={formRef}
+                            org={org}
+                            mode={UPDATE}
+                            resetEditing={() => {
+                                setEditing(-1);
+                            }}
+                            formOpened={true}
+                            organisations={organisations}
+                            setOrganisations={setOrganisations}
+                        />
+                    </div>
                 );
             }
             return (
-                <div key={index} className={style["item"]}>
+                <div key={org.id} className={style["item"]}>
                     <div>{org.name}</div>
                     <div className={style["controls"]}>
                         <div
