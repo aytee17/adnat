@@ -1,0 +1,34 @@
+@import "../../variables.scss";
+
+.container {
+    display: flex;
+    height: 70px;
+    align-items: center;
+}
+
+.date {
+    outline: none;
+    padding: 10px;
+    color: #333;
+    border: 1px solid $border-grey;
+    border-radius: 3px;
+    font-size: 16px;
+    width: 300px;
+    height: 30px;
+    text-align: center;
+    transition: ease-in 0.15s;
+
+    &:focus {
+        border: 1px solid $main-color;
+        transition: ease-out 0.2s;
+    }
+}
+
+.times {
+    display: flex;
+}
+
+.wrapper {
+    width: 65px;
+    margin-left: 10px;
+}
