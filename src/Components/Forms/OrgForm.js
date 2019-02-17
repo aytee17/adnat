@@ -20,7 +20,8 @@ const OrgForm = React.forwardRef(
             setOrganisations,
             updateUser,
             toggleForm,
-            resetEditing
+            resetEditing,
+            showFromRight
         },
         ref
     ) => {
@@ -132,8 +133,10 @@ const OrgForm = React.forwardRef(
                     isSubmitting,
                     status
                 }) => {
-                    const className = classnames(style["form"], {
-                        [style["show"]]: formOpened
+                    const className = classnames({
+                        [style["form"]]: !showFromRight,
+                        [style["show"]]: formOpened,
+                        [style["form-show-right"]]: showFromRight
                     });
 
                     function onHourlyRateChange(event) {
@@ -198,8 +201,13 @@ const OrgForm = React.forwardRef(
                                 </div>
                                 <Button
                                     style={{
-                                        width: "180px",
-                                        marginLeft: "138px"
+                                        width: !showFromRight
+                                            ? "180px"
+                                            : "100px",
+                                        marginTop: 0,
+                                        marginLeft: !showFromRight
+                                            ? "138px"
+                                            : "0"
                                     }}
                                     type="submit"
                                     formNoValidate

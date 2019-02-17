@@ -5,6 +5,7 @@ import { api } from "../../utils/api";
 import mapKeys from "lodash.mapkeys";
 
 import OrgList from "./OrgList";
+import ShiftList from "./ShiftList";
 import Button from "../Controls/Button";
 import OrgForm from "../Forms/OrgForm";
 import useClickOutside from "../Hooks/useClickOutside";
@@ -99,25 +100,29 @@ function Dashboard({ user, updateUser }) {
                                 {`Rate: $${myOrg.hourlyRate} / hour`}
                             </div>
                         </div>
-                        <div
-                            className={classNameForEdit}
-                            onClick={toggleUpdateForm}
-                        >
-                            <div>{`Edit${updateFormOpened ? "ing" : ""}`}</div>
+                        <div className={style["edit-container"]}>
+                            <div
+                                className={classNameForEdit}
+                                onClick={toggleUpdateForm}
+                            >
+                                <div>Edit</div>
+                            </div>
+                            <OrgForm
+                                ref={updateFormRef}
+                                formOpened={updateFormOpened}
+                                toggleForm={toggleUpdateForm}
+                                org={myOrg}
+                                organisations={organisations}
+                                setOrganisations={setOrganisations}
+                                mode={UPDATE}
+                                showFromRight={true}
+                            />
                         </div>
                         <div className={style["controls"]} onClick={leaveOrg}>
                             Leave
                         </div>
                     </div>
-                    <OrgForm
-                        ref={updateFormRef}
-                        formOpened={updateFormOpened}
-                        toggleForm={toggleUpdateForm}
-                        org={myOrg}
-                        organisations={organisations}
-                        setOrganisations={setOrganisations}
-                        mode={UPDATE}
-                    />
+                    <ShiftList />
                 </>
             )}
         </div>

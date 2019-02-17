@@ -12,7 +12,7 @@
 }
 
 .create-form {
-    margin-top: 28px;
+    margin-top: 25px;
     margin-left: 30px;
 }
 
@@ -62,4 +62,9 @@
 
 .horizontal {
     display: flex;
+}
+
+.edit-container {
+    display: flex;
+    position: relative;
 }
