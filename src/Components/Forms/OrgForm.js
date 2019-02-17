@@ -19,7 +19,8 @@ const OrgForm = React.forwardRef(
             organisations,
             setOrganisations,
             updateUser,
-            toggleForm
+            toggleForm,
+            resetEditing
         },
         ref
     ) => {
@@ -95,18 +96,21 @@ const OrgForm = React.forwardRef(
                                             [id]: { id, ...transformedValues }
                                         };
                                         setOrganisations(newList);
-                                        toggleForm();
+                                        if (toggleForm) toggleForm();
+                                        resetEditing();
                                     }
                                 })
                                 .catch(error => {
                                     setSubmitting(false);
+                                    console.log(error);
                                     setStatus({
                                         error: error.response.data.error
                                     });
                                 });
                         } else {
                             setSubmitting(false);
-                            toggleForm();
+                            if (toggleForm) toggleForm();
+                            if (resetEditing) resetEditing();
                         }
                     }
                 }}

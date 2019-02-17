@@ -1,23 +1,23 @@
 import React, { useState } from "react";
 import style from "./OrgList.scss";
+import OrgForm from "../Forms/OrgForm";
 import Input from "../Controls/Input";
 import { FilterIcon } from "../Icons/Icons";
 import { api } from "../../utils/api";
+import { UPDATE } from "../../enums/enum";
 
-function OrgList({ organisations, updateUser }) {
-    function join(organisationId) {
-        return () => {
-            api.post("/organisations/join", { organisationId }).then(
-                response => {
-                    if (organisationId === response.data.id) {
-                        updateUser({ organisationId });
-                    }
-                }
-            );
-        };
-    }
+function OrgList({ organisations, setOrganisations, updateUser }) {
+    const join = organisationId => () => {
+        api.post("/organisations/join", { organisationId }).then(response => {
+            if (organisationId === response.data.id) {
+                updateUser({ organisationId });
+            }
+        });
+    };
 
     const [filter, setFilter] = useState("");
+    const [editing, setEditing] = useState(-1);
+    const updateEditing = organisationId => () => setEditing(organisationId);
 
     const orgs = [];
     for (let key in organisations) {
@@ -37,6 +37,46 @@ function OrgList({ organisations, updateUser }) {
         orgs.length === 0;
 
     const noOrganisations = organisations.length === 0;
+
+    function renderList() {
+        return orgs.map((org, index) => {
+            if (org.id === editing) {
+                return (
+                    <OrgForm
+                        key={index}
+                        org={org}
+                        mode={UPDATE}
+                        resetEditing={() => {
+                            setEditing(-1);
+                            console.log("reseting editing");
+                        }}
+                        formOpened={true}
+                        organisations={organisations}
+                        setOrganisations={setOrganisations}
+                    />
+                );
+            }
+            return (
+                <div key={index} className={style["item"]}>
+                    <div>{org.name}</div>
+                    <div className={style["controls"]}>
+                        <div
+                            className={style["control-item"]}
+                            onClick={updateEditing(org.id)}
+                        >
+                            Edit
+                        </div>
+                        <div
+                            className={style["control-item"]}
+                            onClick={join(org.id)}
+                        >
+                            Join
+                        </div>
+                    </div>
+                </div>
+            );
+        });
+    }
 
     return (
         <div className={style["container"]}>
@@ -62,24 +102,7 @@ function OrgList({ organisations, updateUser }) {
                 {noResults ? (
                     <div className={style["no-results"]}>No results</div>
                 ) : (
-                    orgs.map((org, index) => {
-                        return (
-                            <div key={index} className={style["item"]}>
-                                <div>{org.name}</div>
-                                <div className={style["controls"]}>
-                                    <div className={style["control-item"]}>
-                                        Edit
-                                    </div>
-                                    <div
-                                        className={style["control-item"]}
-                                        onClick={join(org.id)}
-                                    >
-                                        Join
-                                    </div>
-                                </div>
-                            </div>
-                        );
-                    })
+                    renderList()
                 )}
             </div>
         </div>

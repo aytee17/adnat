@@ -67,6 +67,7 @@ function Dashboard({ user, updateUser }) {
                     <div className={style["horizontal"]}>
                         <OrgList
                             organisations={organisations}
+                            setOrganisations={setOrganisations}
                             updateUser={updateUser}
                         />
                         <div className={style["create-form"]}>
