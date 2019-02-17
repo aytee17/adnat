@@ -19,6 +19,7 @@ function OrgList({ organisations, setOrganisations, updateUser }) {
     const [filter, setFilter] = useState("");
     const [editing, setEditing] = useState(-1);
     const updateEditing = organisationId => () => setEditing(organisationId);
+    const clearFilter = () => setFilter("");
 
     const orgs = [];
     for (let key in organisations) {
@@ -110,6 +111,7 @@ function OrgList({ organisations, setOrganisations, updateUser }) {
                     value={filter}
                     icon={true}
                     small={true}
+                    clear={clearFilter}
                 >
                     <FilterIcon />
                 </Input>
