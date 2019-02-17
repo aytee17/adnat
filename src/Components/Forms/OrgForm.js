@@ -18,8 +18,7 @@ const OrgForm = React.forwardRef(
             formOpened,
             organisations,
             setOrganisations,
-            user,
-            setUser,
+            updateUser,
             toggleForm
         },
         ref
@@ -69,8 +68,7 @@ const OrgForm = React.forwardRef(
                                         )
                                     }
                                 });
-                                setUser({
-                                    ...user,
+                                updateUser({
                                     organisationId: id
                                 });
                                 toggleForm();

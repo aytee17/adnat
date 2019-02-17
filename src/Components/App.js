@@ -81,6 +81,8 @@ function App() {
         }
     }
 
+    const updateUser = update => setUser({ ...user, ...update });
+
     const { name, email } = user;
     return !loggedIn ? (
         <Router>
@@ -90,7 +92,7 @@ function App() {
         <div>
             <NavBar name={name} email={email} logout={logout} />
             <Router>
-                <Dashboard path="/" user={user} setUser={setUser} />
+                <Dashboard path="/" user={user} updateUser={updateUser} />
             </Router>
         </div>
     );

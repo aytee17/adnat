@@ -12,11 +12,11 @@
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 10px;
+    height: 60px;
 }
 
 .list {
     height: calc(100vh - 250px);
-    overflow: scroll;
     border: {
         top: 1px solid $grey;
         bottom: 1px solid $grey;
@@ -74,16 +74,39 @@
 .item {
     margin: 5px 0 5px 0;
     padding: 5px;
-    transition: 0.1s ease-in;
     border-radius: 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
     &:hover {
         background-color: $main-color-lighter;
-        transition: 0.15s ease-out;
+    }
+
+    &:hover > .controls {
+        visibility: visible;
     }
 }
 
 .no-results {
     margin: 10px auto;
     width: 100px;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-around;
+    visibility: hidden;
+    width: 100px;
+    cursor: pointer;
+}
+
+.control-item {
+    padding: 5px;
+    border-radius: 2px;
+    color: $main-color-darker;
+
+    &:hover {
+        background-color: $main-color-lightest;
+    }
 }

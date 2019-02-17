@@ -11,7 +11,7 @@ import useClickOutside from "../Hooks/useClickOutside";
 import { CREATE, UPDATE } from "../../enums/enum";
 import fixRate from "../../utils/fixRate";
 
-function Dashboard({ user, setUser }) {
+function Dashboard({ user, updateUser }) {
     const [createFormRef, createFormOpened, toggleCreateForm] = useClickOutside(
         false
     );
@@ -39,7 +39,7 @@ function Dashboard({ user, setUser }) {
         api.post("/organisations/leave").then(response => {
             console.log("leave", { response });
             if (response.data === "OK") {
-                setUser({ ...user, organisationId: null });
+                updateUser({ organisationId: null });
             }
         });
     }
@@ -65,7 +65,10 @@ function Dashboard({ user, setUser }) {
                         existing one or create a new one.
                     </div>
                     <div className={style["horizontal"]}>
-                        <OrgList organisations={organisations} />
+                        <OrgList
+                            organisations={organisations}
+                            updateUser={updateUser}
+                        />
                         <div className={style["create-form"]}>
                             <Button
                                 style={{ width: "200px" }}
@@ -78,8 +81,7 @@ function Dashboard({ user, setUser }) {
                                 ref={createFormRef}
                                 formOpened={createFormOpened}
                                 toggleForm={toggleCreateForm}
-                                user={user}
-                                setUser={setUser}
+                                updateUser={updateUser}
                                 organisations={organisations}
                                 setOrganisations={setOrganisations}
                                 mode={CREATE}
