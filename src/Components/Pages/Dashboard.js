@@ -123,7 +123,7 @@ function Dashboard({ user, updateUser }) {
                         </div>
                     </div>
                     <div className={style["body"]}>
-                        <ShiftList />
+                        <ShiftList user={user} />
                     </div>
                 </>
             )}

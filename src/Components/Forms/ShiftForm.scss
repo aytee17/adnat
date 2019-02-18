@@ -2,8 +2,14 @@
 
 .container {
     display: flex;
-    height: 70px;
     align-items: center;
+    justify-content: space-between;
+    width: 600px;
+    padding: 35px 30px 35px 30px;
+    border-radius: 3px;
+    background: #fff;
+    box-shadow: $shadow;
+    border: $form-border;
 }
 
 .date {
@@ -13,7 +19,7 @@
     border: 1px solid $border-grey;
     border-radius: 3px;
     font-size: 16px;
-    width: 300px;
+    width: 150px;
     height: 30px;
     text-align: center;
     transition: ease-in 0.15s;
@@ -22,6 +28,14 @@
         border: 1px solid $main-color;
         transition: ease-out 0.2s;
     }
+
+    &:focus ~ .label {
+        color: $main-color;
+    }
+}
+
+.label {
+    @include label("small");
 }
 
 .times {

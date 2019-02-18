@@ -2,11 +2,10 @@ import React from "react";
 import style from "./ShiftList.scss";
 import ShiftForm from "../Forms/ShiftForm";
 
-function ShiftList({ shifts }) {
+function ShiftList({ user }) {
     return (
         <div>
-            <div>Shifts</div>
-            <ShiftForm />
+            <ShiftForm user={user} />
         </div>
     );
 }
