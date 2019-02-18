@@ -26,4 +26,11 @@
     &.active {
         background-color: $main-color-darker;
     }
+
+    &.small {
+        font-size: 15px;
+        width: 100px;
+        height: 30px;
+        padding: 3px;
+    }
 }
