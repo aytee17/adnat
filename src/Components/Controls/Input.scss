@@ -74,21 +74,6 @@
     }
 }
 
-@mixin label($length: "small") {
-    fill: currentColor;
-    transition: 0.1s ease-in;
-    pointer-events: none;
-    position: absolute;
-    font-size: 13px;
-    animation: slide-up-#{$length} 0.15s ease-in;
-
-    @if $length == "small" {
-        transform: translateY(-48px);
-    } @else {
-        transform: translateY(-58px);
-    }
-}
-
 .label {
     @include label("big");
 }

@@ -7,12 +7,14 @@ $main-color-darker: #4095c6;
 $border-grey: #c3c3c3;
 $grey: #676767;
 $error-red: #f44336;
+$shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+$form-border: 1px solid #dfdfdf;
 
 @mixin hidden-form($radius: 3px, $time: 0.2s) {
     visibility: hidden;
     opacity: 0;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    border: 1px solid #dfdfdf;
+    box-shadow: $shadow;
+    border: $form-border;
     border-radius: $radius;
     background-color: #fff;
     transition: $time ease-in;
@@ -29,4 +31,19 @@ $error-red: #f44336;
     }
 
     transition: $time ease-out;
+}
+
+@mixin label($length: "small") {
+    fill: currentColor;
+    transition: 0.1s ease-in;
+    pointer-events: none;
+    position: absolute;
+    font-size: 13px;
+    animation: slide-up-#{$length} 0.15s ease-in;
+
+    @if $length == "small" {
+        transform: translateY(-48px);
+    } @else {
+        transform: translateY(-58px);
+    }
 }
