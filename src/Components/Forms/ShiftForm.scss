@@ -1,15 +1,18 @@
 @import "../../variables.scss";
 
 .container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     width: 600px;
-    padding: 35px 30px 35px 30px;
-    border-radius: 3px;
+    padding: 35px 30px 20px 30px;
+    border-radius: 5px;
     background: #fff;
     box-shadow: $shadow;
     border: $form-border;
+}
+
+.inputs {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .date {
@@ -43,6 +46,12 @@
 }
 
 .wrapper {
-    width: 65px;
+    width: 68px;
     margin-left: 10px;
+}
+
+.errors {
+    margin-top: 25px;
+    color: $error-red;
+    font-size: 15px;
 }

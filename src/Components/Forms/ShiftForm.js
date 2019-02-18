@@ -3,6 +3,7 @@ import style from "./ShiftForm.scss";
 import { withFormik } from "formik";
 import { object, number, string } from "yup";
 import { api } from "../../utils/api";
+import { convertToMinutes, absTimeDiff } from "../../utils/time";
 import moment from "moment";
 import Input from "../Controls/Input";
 
@@ -13,77 +14,99 @@ import Button from "../Controls/Button";
 
 function InnerForm({
     values,
-    touched,
     errors,
-    handleChange,
     handleSubmit,
     isSubmitting,
     setFieldValue,
     handleBlur
 }) {
+    const allErrors = Object.values(errors);
     return (
         <form onSubmit={handleSubmit}>
             <div className={style["container"]}>
-                <div>
-                    <DatePicker
-                        name="startDate"
-                        className={style["date"]}
-                        dateFormat="ddd - DD/MM/YY"
-                        selected={values.startDate}
-                        onChange={date => setFieldValue("startDate", date)}
-                        minDate={moment()}
-                    />
-                    <div className={style["label"]}>Date</div>
-                </div>
-                <div className={style["times"]}>
-                    <div className={style["wrapper"]}>
-                        <TimeField
-                            name="startTime"
-                            value={values.startTime}
-                            onChange={value => {
-                                setFieldValue("startTime", value);
-                            }}
-                            input={
-                                <Input label="Start Time" small hint="hh:mm" />
-                            }
+                <div className={style["inputs"]}>
+                    <div>
+                        <DatePicker
+                            name="startDate"
+                            className={style["date"]}
+                            dateFormat="ddd - DD/MM/YY"
+                            selected={values.startDate}
+                            onChange={date => setFieldValue("startDate", date)}
+                            minDate={moment()}
+                            disabled={isSubmitting}
                         />
+                        <div className={style["label"]}>Date</div>
                     </div>
+                    <div className={style["times"]}>
+                        <div className={style["wrapper"]}>
+                            <TimeField
+                                name="startTime"
+                                value={values.startTime}
+                                onChange={value => {
+                                    setFieldValue("startTime", value);
+                                }}
+                                input={
+                                    <Input
+                                        label="Start Time"
+                                        small
+                                        hint="hh:mm"
+                                    />
+                                }
+                                disabled={isSubmitting}
+                            />
+                        </div>
 
-                    <div className={style["wrapper"]}>
-                        <TimeField
-                            name="endTime"
-                            value={values.endTime}
-                            onChange={value => setFieldValue("endTime", value)}
-                            input={
-                                <Input label="End Time" small hint="hh:mm" />
-                            }
-                        />
+                        <div className={style["wrapper"]}>
+                            <TimeField
+                                name="endTime"
+                                value={values.endTime}
+                                onChange={value =>
+                                    setFieldValue("endTime", value)
+                                }
+                                input={
+                                    <Input
+                                        label="End Time"
+                                        small
+                                        hint="hh:mm"
+                                        onBlur={handleBlur}
+                                    />
+                                }
+                                disabled={isSubmitting}
+                            />
+                        </div>
                     </div>
+                    <Input
+                        name="breakLength"
+                        style={{ width: "80px" }}
+                        small={true}
+                        label="Break"
+                        hint="Minutes"
+                        value={values.breakLength}
+                        onChange={event => {
+                            let { value } = event.target;
+
+                            const regex = /^$|^[1-9]\d*?$/;
+                            const matches = regex.test(value);
+
+                            if (value !== "") {
+                                value = parseInt(value);
+                            }
+                            if (matches) {
+                                setFieldValue("breakLength", value);
+                            }
+                        }}
+                        onBlur={handleBlur}
+                        disabled={isSubmitting}
+                    />
+                    <Button type="submit" small={true}>
+                        Create Shift
+                    </Button>
                 </div>
-                <Input
-                    name="breakLength"
-                    style={{ width: "80px" }}
-                    small={true}
-                    label="Break"
-                    type="number"
-                    hint="Minutes"
-                    min={0}
-                    invalid={touched.breakLength && errors.breakLength}
-                    errorMessage={errors.breakLength}
-                    value={values.breakLength}
-                    onChange={event => {
-                        let { value } = event.target;
-                        console.log({ value });
-                        if (value !== "") {
-                            value = parseInt(value);
-                        }
-                        setFieldValue("breakLength", value);
-                    }}
-                    onBlur={handleBlur}
-                />
-                <Button type="submit" small={true}>
-                    Create Shift
-                </Button>
+                <div className={style["errors"]}>
+                    {allErrors.map(error => (
+                        <div>{error}</div>
+                    ))}
+                </div>
             </div>
         </form>
     );
@@ -97,17 +120,27 @@ const ShiftForm = withFormik({
         breakLength: ""
     }),
     validationSchema: object().shape({
+        endTime: string().when("startTime", (startTime, schema) => {
+            return schema.test(
+                "end time is not equal to start time",
+                "end can't equal start",
+                endTime => {
+                    console.log("checking", { endTime, startTime });
+                    return endTime !== startTime;
+                }
+            );
+        }),
         breakLength: number("should be number").when(
             ["startTime", "endTime"],
             (startTime, endTime, schema) => {
+                const difference = absTimeDiff(startTime, endTime);
                 return schema.test(
                     "break is shorter than shift",
-                    "Can't be longer than the shift",
+                    `A break can't be longer than the duration of the shift`,
                     breakLength => {
-                        if (breakLength === undefined) return true;
-                        return (
-                            absTimeDiff(startTime, endTime) - breakLength > 0
-                        );
+                        if (breakLength === undefined || difference === 0)
+                            return true;
+                        return difference - breakLength > 0;
                     }
                 );
             }
@@ -141,23 +174,5 @@ const ShiftForm = withFormik({
         });
     }
 })(InnerForm);
-
-function convertToMinutes(time) {
-    let [hours, minutes] = time.split(":");
-    hours = parseInt(hours);
-    minutes = parseInt(minutes);
-    minutes = minutes + hours * 60;
-    return minutes;
-}
-
-function absTimeDiff(start, end) {
-    start = convertToMinutes(start);
-    end = convertToMinutes(end);
-
-    if (start > end) {
-        return 24 * 60 - start + end;
-    }
-    return end - start;
-}
 
 export default ShiftForm;
