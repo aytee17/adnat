@@ -11,6 +11,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import TimeField from "react-simple-timefield";
 import Button from "../Controls/Button";
+import { CREATE, UPDATE } from "../../enums/enum";
+import isEmpty from "lodash.isempty";
+import isEqual from "lodash.isequal";
 
 function InnerForm({
     values,
@@ -18,9 +21,23 @@ function InnerForm({
     handleSubmit,
     isSubmitting,
     setFieldValue,
-    handleBlur
+    handleBlur,
+    mode
 }) {
     const allErrors = Object.values(errors);
+
+    let sumbitTitle;
+    switch (mode) {
+        case CREATE:
+            sumbitTitle = "Create Shift";
+            break;
+        case UPDATE:
+            sumbitTitle = "Update Shift";
+            break;
+        default:
+            sumbitTitle = "";
+    }
+
     return (
         <form onSubmit={handleSubmit}>
             <div className={style["container"]}>
@@ -99,7 +116,7 @@ function InnerForm({
                         disabled={isSubmitting}
                     />
                     <Button type="submit" small={true}>
-                        Create Shift
+                        {sumbitTitle}
                     </Button>
                 </div>
                 <div className={style["errors"]}>
@@ -113,19 +130,29 @@ function InnerForm({
 }
 
 const ShiftForm = withFormik({
-    mapPropsToValues: () => ({
-        startDate: moment(),
-        startTime: "09:00",
-        endTime: "17:00",
-        breakLength: ""
-    }),
+    enableReinitialize: true,
+    mapPropsToValues: props => {
+        let shiftDate, startTime, endTime, breakLength;
+        if (props.shift) {
+            const { shift } = props;
+            shiftDate = moment(shift.shiftDate);
+            startTime = shift.startTime;
+            endTime = shift.endTime;
+            breakLength = shift.breakLength;
+        } else {
+            shiftDate = moment();
+            startTime = "09:00";
+            endTime = "17:00";
+            breakLength = "";
+        }
+        return { startDate: shiftDate, startTime, endTime, breakLength };
+    },
     validationSchema: object().shape({
         endTime: string().when("startTime", (startTime, schema) => {
             return schema.test(
                 "end time is not equal to start time",
-                "end can't equal start",
+                "Can't start and finish at the same time",
                 endTime => {
-                    console.log("checking", { endTime, startTime });
                     return endTime !== startTime;
                 }
             );
@@ -158,7 +185,6 @@ const ShiftForm = withFormik({
         finishDate = finishDate.format(format);
 
         const transformedValues = {
-            userId: props.user.id,
             start: `${startDate} ${values.startTime}`,
             finish: `${finishDate} ${values.endTime}`
         };
@@ -166,13 +192,43 @@ const ShiftForm = withFormik({
         if (values.breakLength !== "")
             transformedValues.breakLength = values.breakLength;
 
-        console.log({ transformedValues });
+        if (props.mode === CREATE) {
+            transformedValues.userId = props.user.id;
+            api.post("/shifts", transformedValues).then(response => {
+                setSubmitting(false);
+                const shift = response.data;
+                props.addShift(shift);
+            });
+        } else if (props.mode === UPDATE) {
+            const { shift } = props;
 
-        api.post("/shifts", transformedValues).then(response => {
-            setSubmitting(false);
-            const shift = response.data;
-            props.addShift(shift);
-        });
+            const originalValues = props.shifts.find(
+                shift => shift.id === shift.id
+            );
+
+            const comparison = ["start", "finish", "breakLength"];
+            const body = {};
+
+            comparison.forEach(key => {
+                if (originalValues[key] !== transformedValues[key]) {
+                    body[key] = transformedValues[key];
+                    originalValues[key] = transformedValues[key];
+                }
+            });
+
+            if (!isEmpty(body)) {
+                api.put(`/shifts/${shift.id}`, body).then(response => {
+                    setSubmitting(false);
+                    props.resetEditing();
+                    if (isEqual(response.data, originalValues)) {
+                        props.setShifts(shifts);
+                    }
+                });
+            } else {
+                setSubmitting(false);
+                props.resetEditing();
+            }
+        }
     }
 })(InnerForm);
 
