@@ -115,8 +115,8 @@ function InnerForm({
 const ShiftForm = withFormik({
     mapPropsToValues: () => ({
         startDate: moment(),
-        startTime: "04:00",
-        endTime: "05:00",
+        startTime: "09:00",
+        endTime: "17:00",
         breakLength: ""
     }),
     validationSchema: object().shape({
