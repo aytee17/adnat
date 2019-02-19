@@ -73,8 +73,12 @@ function ShiftList({ user, org }) {
                 shiftCost
             } = shift;
 
+            const isActiveRow = editing === id;
+            const isEditing = editing >= 0;
+
             const className = classnames(style["shift-row"], {
-                [style["active-row"]]: editing === id
+                [style["active-row"]]: isActiveRow,
+                [style["faded-row"]]: isEditing && !isActiveRow
             });
 
             const convertDateFormat = date =>
@@ -95,15 +99,25 @@ function ShiftList({ user, org }) {
                     <td className={style["cell-right"]}>{hoursWorked}</td>
                     <td className={style["cell-right"]}>{shiftCost}</td>
                     <td className={style["cell-right"]}>
-                        <div className={style["controls"]}>
-                            <div
-                                className={style["control"]}
-                                onClick={editShift(id)}
-                            >
-                                Edit
+                        {!(isEditing && !isActiveRow) && (
+                            <div className={style["controls"]}>
+                                <div
+                                    className={style["control"]}
+                                    onClick={
+                                        isActiveRow
+                                            ? () => resetEditing()
+                                            : editShift(id)
+                                    }
+                                >
+                                    {isActiveRow ? "Cancel" : "Edit"}
+                                </div>
+                                {!isEditing && (
+                                    <div className={style["control"]}>
+                                        Delete
+                                    </div>
+                                )}
                             </div>
-                            <div className={style["control"]}>Delete</div>
-                        </div>
+                        )}
                     </td>
                 </tr>
             );

@@ -58,6 +58,10 @@ tr {
         background-color: $main-color;
         color: #fff;
     }
+
+    &.faded-row {
+        color: grey;
+    }
 }
 
 tr:first-child {
