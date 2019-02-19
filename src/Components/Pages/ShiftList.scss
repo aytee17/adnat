@@ -1,0 +1,72 @@
+@import "../../variables.scss";
+
+.container {
+    font-weight: 400;
+}
+.table-container {
+    width: 100%;
+}
+
+thead,
+tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.shifts {
+    border-collapse: collapse;
+    margin-bottom: 35px;
+}
+
+.shifts-body {
+    @include table-shadow;
+    height: calc(100vh - 450px);
+    border: {
+        top: 1px solid grey;
+        bottom: 1px solid grey;
+    }
+}
+
+.shifts-body:before,
+.shifts-body:after {
+    @include table-shadow-before-after;
+}
+
+.shifts-body:after {
+    @include table-shadow-after;
+}
+
+.column-header {
+    cursor: pointer;
+    padding-bottom: 2px;
+}
+
+.shift-row {
+    cursor: pointer;
+
+    &:hover {
+        background-color: $main-color-lighter;
+    }
+
+    &.active-row {
+        background-color: $main-color;
+        color: #fff;
+    }
+}
+
+tr:first-child {
+    margin-top: 5px;
+}
+
+tr:last-child {
+    margin-bottom: 5px;
+}
+
+.cell-center {
+    text-align: center;
+}
+
+.cell-right {
+    text-align: right;
+}
