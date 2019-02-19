@@ -170,7 +170,8 @@ const ShiftForm = withFormik({
 
         api.post("/shifts", transformedValues).then(response => {
             setSubmitting(false);
-            console.log(response.data);
+            const shift = response.data;
+            props.addShift(shift);
         });
     }
 })(InnerForm);
