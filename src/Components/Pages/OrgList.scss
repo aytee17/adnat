@@ -17,7 +17,7 @@
 
 .list {
     @include table-shadow;
-    height: calc(100vh - 250px);
+    max-height: calc(100vh - 250px);
     border: {
         top: 1px solid $grey;
         bottom: 1px solid $grey;
