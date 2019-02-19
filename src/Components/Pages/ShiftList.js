@@ -17,7 +17,7 @@ function ShiftList({ user, org }) {
     const [editing, setEditing] = useState(-1);
 
     const addShift = shift => setShifts([...shifts, shift]);
-    const editShift = shiftID => setEditing(shiftID);
+    const editShift = shiftID => () => setEditing(shiftID);
     const resetEditing = () => setEditing(-1);
 
     useEffect(() => {
