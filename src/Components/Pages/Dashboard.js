@@ -58,9 +58,9 @@ function Dashboard({ user, updateUser }) {
     });
     return (
         <div className={style["container"]}>
-            <div className={style["greeting"]}>Hi, {name}!</div>
             {organisationId === null ? (
                 <div>
+                    <div className={style["greeting"]}>Hi, {name}!</div>
                     <div>
                         You aren't a member of any organisations. Join an
                         existing one or create a new one.
@@ -123,7 +123,7 @@ function Dashboard({ user, updateUser }) {
                         </div>
                     </div>
                     <div className={style["body"]}>
-                        <ShiftList user={user} />
+                        <ShiftList user={user} org={myOrg} />
                     </div>
                 </>
             )}
