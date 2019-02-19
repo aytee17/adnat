@@ -5,6 +5,7 @@ import ShiftForm from "../Forms/ShiftForm";
 import { api } from "../../utils/api";
 import mapKeys from "lodash.mapkeys";
 import { absTimeDiff, convertToMinutes } from "../../utils/time";
+import { CREATE, UPDATE } from "../../enums/enum";
 
 function getTime(date) {
     return new Date(date).getTime();
@@ -13,10 +14,11 @@ function getTime(date) {
 function ShiftList({ user, org }) {
     const [shifts, setShifts] = useState([]);
     const [users, setUsers] = useState({});
-    const [activeShift, setActiveShift] = useState(-1);
+    const [editing, setEditing] = useState(-1);
 
-    const setActive = shiftID => () => setActiveShift(shiftID);
     const addShift = shift => setShifts([...shifts, shift]);
+    const editShift = shiftID => setEditing(shiftID);
+    const resetEditing = () => setEditing(-1);
 
     useEffect(() => {
         Promise.all([api.get("/shifts"), api.get("/users")]).then(responses => {
@@ -44,7 +46,8 @@ function ShiftList({ user, org }) {
                 endTime,
                 breakLength,
                 hoursWorked,
-                shiftCost
+                shiftCost,
+                breakLength
             };
         })
         .sort((a, b) => {
@@ -71,17 +74,37 @@ function ShiftList({ user, org }) {
             } = shift;
 
             const className = classnames(style["shift-row"], {
-                [style["active-row"]]: activeShift === id
+                [style["active-row"]]: editing === id
             });
+
+            const convertDateFormat = date =>
+                date
+                    .split("-")
+                    .reverse()
+                    .join("/");
+
             return (
-                <tr key={id} className={className} onClick={setActive(id)}>
+                <tr key={id} className={className}>
                     <td className={style[""]}>{users[userId].name}</td>
-                    <td className={style["cell-center"]}>{shiftDate}</td>
+                    <td className={style["cell-center"]}>
+                        {convertDateFormat(shiftDate)}
+                    </td>
                     <td className={style["cell-center"]}>{startTime}</td>
                     <td className={style["cell-center"]}>{endTime}</td>
                     <td className={style["cell-right"]}>{breakLength}</td>
                     <td className={style["cell-right"]}>{hoursWorked}</td>
                     <td className={style["cell-right"]}>{shiftCost}</td>
+                    <td className={style["cell-right"]}>
+                        <div className={style["controls"]}>
+                            <div
+                                className={style["control"]}
+                                onClick={editShift(id)}
+                            >
+                                Edit
+                            </div>
+                            <div className={style["control"]}>Delete</div>
+                        </div>
+                    </td>
                 </tr>
             );
         });
@@ -94,9 +117,11 @@ function ShiftList({ user, org }) {
         "Finish Time",
         "Break Length",
         "Hours Worked",
-        "Shift Cost"
+        "Shift Cost",
+        ""
     ];
 
+    const isEditing = editing > -1;
     return (
         <div className={style["container"]}>
             <div className={style["table-container"]}>
@@ -118,7 +143,19 @@ function ShiftList({ user, org }) {
                     </tbody>
                 </table>
             </div>
-            <ShiftForm user={user} addShift={addShift} />
+            <ShiftForm
+                user={user}
+                addShift={addShift}
+                mode={isEditing ? UPDATE : CREATE}
+                shift={
+                    isEditing
+                        ? processedShifts.find(shift => shift.id === editing)
+                        : undefined
+                }
+                resetEditing={resetEditing}
+                shifts={shifts}
+                setShifts={setShifts}
+            />
         </div>
     );
 }

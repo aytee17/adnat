@@ -21,7 +21,7 @@ tr {
 
 .shifts-body {
     @include table-shadow;
-    height: calc(100vh - 450px);
+    max-height: calc(100vh - 450px);
     border: {
         top: 1px solid grey;
         bottom: 1px solid grey;
@@ -43,7 +43,12 @@ tr {
 }
 
 .shift-row {
-    cursor: pointer;
+    padding: 10px;
+    border-radius: 3px;
+
+    &:nth-child(odd) {
+        background-color: #f2f2f2;
+    }
 
     &:hover {
         background-color: $main-color-lighter;
@@ -63,10 +68,25 @@ tr:last-child {
     margin-bottom: 5px;
 }
 
+@mixin cell {
+    height: 30px;
+}
+
 .cell-center {
+    @include cell;
     text-align: center;
 }
 
 .cell-right {
+    @include cell;
     text-align: right;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.control {
+    cursor: pointer;
 }
