@@ -25,6 +25,12 @@ const OrgForm = React.forwardRef(
         },
         ref
     ) => {
+        useEffect(() => {
+            ref.current.scrollIntoView({
+                behavior: "smooth"
+            });
+        }, []);
+
         let name, hourlyRate;
         if (org) {
             name = org.name;
@@ -33,13 +39,6 @@ const OrgForm = React.forwardRef(
             name = "";
             hourlyRate = "";
         }
-
-        useEffect(() => {
-            ref.current.scrollIntoView({
-                behavior: "smooth"
-            });
-        }, []);
-
         return (
             <Formik
                 initialValues={{ name, hourlyRate }}
@@ -110,7 +109,6 @@ const OrgForm = React.forwardRef(
                                 })
                                 .catch(error => {
                                     setSubmitting(false);
-                                    console.log(error);
                                     setStatus({
                                         error: error.response.data.error
                                     });
