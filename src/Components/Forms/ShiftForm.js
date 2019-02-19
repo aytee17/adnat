@@ -200,10 +200,10 @@ const ShiftForm = withFormik({
                 props.addShift(shift);
             });
         } else if (props.mode === UPDATE) {
-            const { shift } = props;
+            const { shift: currentShift } = props;
 
             const originalValues = props.shifts.find(
-                shift => shift.id === shift.id
+                shift => shift.id === currentShift.id
             );
 
             const comparison = ["start", "finish", "breakLength"];
@@ -217,7 +217,7 @@ const ShiftForm = withFormik({
             });
 
             if (!isEmpty(body)) {
-                api.put(`/shifts/${shift.id}`, body).then(response => {
+                api.put(`/shifts/${currentShift.id}`, body).then(response => {
                     setSubmitting(false);
                     props.resetEditing();
                     if (isEqual(response.data, originalValues)) {
