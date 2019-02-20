@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export function convertToMinutes(time) {
     let [hours, minutes] = time.split(":");
     hours = parseInt(hours);
@@ -29,8 +31,44 @@ export function getHoursWorked(startTime, endTime, breakLength) {
     return hoursWorked;
 }
 
-export function getShiftCost(hoursWorked, hourlyRate) {
-    const shiftCost = parseFloat(hoursWorked) * parseFloat(hourlyRate);
+export function getShiftCost(
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+    hourlyRate,
+    breakLength,
+    hoursWorked
+) {
+    let shiftCost;
+    const startDay = moment(startDate).day();
+    const endDay = moment(endDate).day();
+    const startOnSunday = startDay === 0;
+    const endOnSunday = endDay == 0;
+
+    let hoursFirstDay = 24 - convertToMinutes(startTime) / 60;
+    let hoursSecondDay = convertToMinutes(endTime) / 60;
+    const breakHours = breakLength / 60;
+
+    if (hoursSecondDay - breakHours <= 0) {
+        hoursFirstDay = hoursFirstDay + (hoursSecondDay - breakHours);
+        hoursSecondDay = 0;
+    } else {
+        hoursSecondDay = hoursSecondDay - breakHours;
+    }
+
+    if (startOnSunday && endOnSunday) {
+        shiftCost = parseFloat(hoursWorked) * parseFloat(hourlyRate) * 2;
+    } else if (endOnSunday) {
+        shiftCost =
+            (2 * hoursSecondDay + hoursFirstDay) * parseFloat(hourlyRate);
+    } else if (startOnSunday) {
+        shiftCost =
+            (2 * hoursFirstDay + hoursFirstDay) * parseFloat(hourlyRate);
+    } else {
+        shiftCost = parseFloat(hoursWorked) * parseFloat(hourlyRate);
+    }
+
     return shiftCost.toFixed(2);
 }
 

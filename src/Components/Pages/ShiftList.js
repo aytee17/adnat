@@ -68,9 +68,17 @@ function ShiftList({ user, org }) {
             const { id, userId } = shift;
             const breakLength = parseInt(shift.breakLength) || 0;
             const [shiftDate, startTime] = shift.start.split(" ");
-            const endTime = shift.finish.split(" ")[1];
+            const [endDate, endTime] = shift.finish.split(" ");
             const hoursWorked = getHoursWorked(startTime, endTime, breakLength);
-            const shiftCost = getShiftCost(hoursWorked, org.hourlyRate);
+            const shiftCost = getShiftCost(
+                shiftDate,
+                endDate,
+                startTime,
+                endTime,
+                org.hourlyRate,
+                breakLength,
+                hoursWorked
+            );
 
             return {
                 id,
