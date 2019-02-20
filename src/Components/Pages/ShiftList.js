@@ -4,13 +4,14 @@ import classnames from "classnames";
 import ShiftForm from "../Forms/ShiftForm";
 import { api } from "../../utils/api";
 import mapKeys from "lodash.mapkeys";
-import { absTimeDiff, convertToMinutes } from "../../utils/time";
+import {
+    getTime,
+    getShiftCost,
+    getHoursWorked,
+    convertToMinutes
+} from "../../utils/time";
 import { CREATE, UPDATE } from "../../enums/enum";
 import useSticky from "../Hooks/useSticky";
-
-function getTime(date) {
-    return new Date(date).getTime();
-}
 
 function ShiftList({ user, org }) {
     const [shifts, setShifts] = useState([]);
@@ -212,24 +213,6 @@ function ShiftList({ user, org }) {
             />
         </div>
     );
-}
-
-function getHoursWorked(startTime, endTime, breakLength) {
-    let hoursWorked = (
-        absTimeDiff(startTime, endTime) / 60 -
-        breakLength / 60
-    ).toFixed(2);
-
-    const [first, second] = hoursWorked.split(".");
-    if (second === "00") {
-        hoursWorked = first;
-    }
-    return hoursWorked;
-}
-
-function getShiftCost(hoursWorked, hourlyRate) {
-    const shiftCost = parseFloat(hoursWorked) * parseFloat(hourlyRate);
-    return shiftCost.toFixed(2);
 }
 
 export default ShiftList;
