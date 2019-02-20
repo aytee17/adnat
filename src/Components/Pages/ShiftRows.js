@@ -11,7 +11,8 @@ const ShiftRows = React.forwardRef(
             resetEditing,
             editShift,
             users,
-            stickStyle
+            stickStyle,
+            deleteShift
         },
         ref
     ) => {
@@ -79,7 +80,10 @@ const ShiftRows = React.forwardRef(
                                     {isActiveRow ? "Cancel" : "Edit"}
                                 </div>
                                 {!isEditing && (
-                                    <div className={style["control"]}>
+                                    <div
+                                        className={style["control"]}
+                                        onClick={deleteShift(id)}
+                                    >
                                         Delete
                                     </div>
                                 )}

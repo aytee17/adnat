@@ -55,6 +55,13 @@ function ShiftList({ user, org }) {
         setJustUpdated(updated);
         unSetRowRef(scrollIntoView);
     };
+    const deleteShift = shiftID => () => {
+        api.delete(`shifts/${shiftID}`).then(response => {
+            if (response.data === "OK") {
+                setShifts(shifts.filter(shift => shift.id !== shiftID));
+            }
+        });
+    };
 
     const processedShifts = shifts
         .map(shift => {
@@ -116,16 +123,23 @@ function ShiftList({ user, org }) {
                         </tr>
                     </thead>
                     <tbody ref={parentRef} className={style["shifts-body"]}>
-                        <ShiftRows
-                            ref={rowRefs}
-                            users={users}
-                            processedShifts={processedShifts}
-                            editing={editing}
-                            stickStyle={stickStyle}
-                            justUpdated={justUpdated}
-                            resetEditing={resetEditing}
-                            editShift={editShift}
-                        />
+                        {shifts.length === 0 ? (
+                            <div className={style["no-shifts"]}>
+                                No shifts to show. Create one below.
+                            </div>
+                        ) : (
+                            <ShiftRows
+                                ref={rowRefs}
+                                users={users}
+                                processedShifts={processedShifts}
+                                editing={editing}
+                                stickStyle={stickStyle}
+                                justUpdated={justUpdated}
+                                resetEditing={resetEditing}
+                                editShift={editShift}
+                                deleteShift={deleteShift}
+                            />
+                        )}
                     </tbody>
                 </table>
             </div>
