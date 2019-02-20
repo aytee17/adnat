@@ -48,6 +48,7 @@
 
 .control {
     cursor: pointer;
+    user-select: none;
 }
 
 @mixin cell {
