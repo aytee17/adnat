@@ -27,6 +27,10 @@ function ShiftList({ user, org }) {
     }, []);
 
     const [justUpdated, setJustUpdated] = useState(-1);
+    const justCreated = id => {
+        rowRefs.current[id].scrollIntoView();
+        setJustUpdated(id);
+    };
     useEffect(() => {
         if (justUpdated !== -1) {
             window.setTimeout(() => {
@@ -204,6 +208,7 @@ function ShiftList({ user, org }) {
                 resetEditing={resetEditing}
                 shifts={shifts}
                 setShifts={setShifts}
+                justCreated={justCreated}
             />
         </div>
     );

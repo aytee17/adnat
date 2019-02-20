@@ -198,6 +198,7 @@ const ShiftForm = withFormik({
                 setSubmitting(false);
                 const shift = response.data;
                 props.addShift(shift);
+                props.justCreated(shift.id);
             });
         } else if (props.mode === UPDATE) {
             const { shift: currentShift } = props;
