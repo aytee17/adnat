@@ -89,8 +89,27 @@ tr:last-child {
 .controls {
     display: flex;
     justify-content: space-evenly;
+    color: grey;
+
+    &.editing {
+        color: #fff;
+    }
 }
 
 .control {
     cursor: pointer;
+}
+
+@keyframes yellowfade {
+    from {
+        background: yellow;
+    }
+    to {
+        background: transparent;
+    }
+}
+
+.just-updated {
+    animation-name: yellowfade;
+    animation-duration: 1s;
 }
