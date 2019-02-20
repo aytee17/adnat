@@ -42,74 +42,10 @@ tr {
     padding-bottom: 2px;
 }
 
-.shift-row {
-    padding: 10px;
-    border-radius: 3px;
-
-    &:nth-child(odd) {
-        background-color: #f2f2f2;
-    }
-
-    &:hover {
-        background-color: $main-color-lighter;
-    }
-
-    &.active-row {
-        background-color: $main-color;
-        color: #fff;
-    }
-
-    &.faded-row {
-        color: grey;
-    }
-}
-
 tr:first-child {
     margin-top: 5px;
 }
 
 tr:last-child {
     margin-bottom: 5px;
-}
-
-@mixin cell {
-    height: 30px;
-}
-
-.cell-center {
-    @include cell;
-    text-align: center;
-}
-
-.cell-right {
-    @include cell;
-    text-align: right;
-}
-
-.controls {
-    display: flex;
-    justify-content: space-evenly;
-    color: grey;
-
-    &.editing {
-        color: #fff;
-    }
-}
-
-.control {
-    cursor: pointer;
-}
-
-@keyframes yellowfade {
-    from {
-        background: yellow;
-    }
-    to {
-        background: transparent;
-    }
-}
-
-.just-updated {
-    animation-name: yellowfade;
-    animation-duration: 1s;
 }
