@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import style from "./ShiftList.scss";
 import classnames from "classnames";
 import ShiftForm from "../Forms/ShiftForm";
@@ -6,6 +6,7 @@ import { api } from "../../utils/api";
 import mapKeys from "lodash.mapkeys";
 import { absTimeDiff, convertToMinutes } from "../../utils/time";
 import { CREATE, UPDATE } from "../../enums/enum";
+import useSticky from "../Hooks/useSticky";
 
 function getTime(date) {
     return new Date(date).getTime();
@@ -16,10 +17,6 @@ function ShiftList({ user, org }) {
     const [users, setUsers] = useState({});
     const [editing, setEditing] = useState(-1);
 
-    const addShift = shift => setShifts([...shifts, shift]);
-    const editShift = shiftID => () => setEditing(shiftID);
-    const resetEditing = () => setEditing(-1);
-
     useEffect(() => {
         Promise.all([api.get("/shifts"), api.get("/users")]).then(responses => {
             const users = mapKeys(responses[1].data, "id");
@@ -28,6 +25,22 @@ function ShiftList({ user, org }) {
             setShifts(shifts);
         });
     }, []);
+    const [justUpdated, setJustUpdated] = useState(-1);
+
+    const rowRefs = useRef({});
+    const parentRef = useRef();
+    const [setRowRef, unSetRowRef, stickStyle] = useSticky(parentRef);
+
+    const addShift = shift => setShifts([...shifts, shift]);
+    const editShift = shiftID => () => {
+        setEditing(shiftID);
+        setRowRef(rowRefs.current[shiftID]);
+    };
+    const resetEditing = (scrollIntoView, updated) => {
+        setEditing(-1);
+        setJustUpdated(updated);
+        unSetRowRef(scrollIntoView);
+    };
 
     const processedShifts = shifts
         .map(shift => {
@@ -75,10 +88,16 @@ function ShiftList({ user, org }) {
 
             const isActiveRow = editing === id;
             const isEditing = editing >= 0;
+            const isJustUpdated = justUpdated === id;
 
             const className = classnames(style["shift-row"], {
                 [style["active-row"]]: isActiveRow,
-                [style["faded-row"]]: isEditing && !isActiveRow
+                [style["faded-row"]]: isEditing && !isActiveRow,
+                [style["just-updated"]]: isJustUpdated
+            });
+
+            const classNameForControl = classnames(style["controls"], {
+                [style["editing"]]: isEditing
             });
 
             const convertDateFormat = date =>
@@ -88,7 +107,14 @@ function ShiftList({ user, org }) {
                     .join("/");
 
             return (
-                <tr key={id} className={className}>
+                <tr
+                    key={id}
+                    ref={element => {
+                        rowRefs.current[id] = element;
+                    }}
+                    style={isActiveRow ? stickStyle : {}}
+                    className={className}
+                >
                     <td className={style[""]}>{users[userId].name}</td>
                     <td className={style["cell-center"]}>
                         {convertDateFormat(shiftDate)}
@@ -100,12 +126,12 @@ function ShiftList({ user, org }) {
                     <td className={style["cell-right"]}>{shiftCost}</td>
                     <td className={style["cell-right"]}>
                         {!(isEditing && !isActiveRow) && (
-                            <div className={style["controls"]}>
+                            <div className={classNameForControl}>
                                 <div
                                     className={style["control"]}
                                     onClick={
                                         isActiveRow
-                                            ? () => resetEditing()
+                                            ? () => resetEditing(false)
                                             : editShift(id)
                                     }
                                 >
@@ -152,7 +178,7 @@ function ShiftList({ user, org }) {
                             ))}
                         </tr>
                     </thead>
-                    <tbody className={style["shifts-body"]}>
+                    <tbody ref={parentRef} className={style["shifts-body"]}>
                         {renderShifts()}
                     </tbody>
                 </table>

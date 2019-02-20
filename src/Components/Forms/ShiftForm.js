@@ -219,7 +219,7 @@ const ShiftForm = withFormik({
             if (!isEmpty(body)) {
                 api.put(`/shifts/${currentShift.id}`, body).then(response => {
                     setSubmitting(false);
-                    props.resetEditing();
+                    props.resetEditing(true, currentShift.id);
                     if (isEqual(response.data, originalValues)) {
                         props.setShifts(shifts);
                     }
