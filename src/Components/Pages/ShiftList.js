@@ -25,13 +25,22 @@ function ShiftList({ user, org }) {
             setShifts(shifts);
         });
     }, []);
+
     const [justUpdated, setJustUpdated] = useState(-1);
+    useEffect(() => {
+        if (justUpdated !== -1) {
+            window.setTimeout(() => {
+                setJustUpdated(-1);
+            }, 1000);
+        }
+    }, [justUpdated]);
 
     const rowRefs = useRef({});
     const parentRef = useRef();
     const [setRowRef, unSetRowRef, stickStyle] = useSticky(parentRef);
 
     const addShift = shift => setShifts([...shifts, shift]);
+
     const editShift = shiftID => () => {
         setEditing(shiftID);
         setRowRef(rowRefs.current[shiftID]);
