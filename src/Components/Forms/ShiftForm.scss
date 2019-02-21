@@ -17,16 +17,7 @@
 }
 
 .date {
-    outline: none;
-    padding: 10px;
-    color: #333;
-    border: 1px solid $border-grey;
-    border-radius: 3px;
-    font-size: 16px;
-    width: 150px;
-    height: 30px;
-    text-align: center;
-    transition: ease-in 0.15s;
+    @include date(false);
 
     &:focus {
         border: 1px solid $main-color;
