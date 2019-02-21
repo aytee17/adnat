@@ -13,12 +13,15 @@ import {
 } from "../../utils/time";
 import { CREATE, UPDATE } from "../../enums/enum";
 import useSticky from "../Hooks/useSticky";
+import moment from "moment";
 
 function ShiftList({ user, org }) {
     const [shifts, setShifts] = useState([]);
     const [users, setUsers] = useState({});
     const [editing, setEditing] = useState(-1);
     const [userFilterTests, setUserFilterTests] = useState([]);
+    const [startDateFilter, setStartDateFilter] = useState(null);
+    const [endDateFilter, setEndDateFilter] = useState(null);
 
     useEffect(() => {
         Promise.all([api.get("/shifts"), api.get("/users")]).then(responses => {
@@ -65,14 +68,23 @@ function ShiftList({ user, org }) {
         });
     };
 
-    console.log(userFilterTests);
-    const processedShifts = process(shifts, org.hourlyRate, userFilterTests);
+    const processedShifts = process(
+        shifts,
+        org.hourlyRate,
+        userFilterTests,
+        startDateFilter,
+        endDateFilter
+    );
     const isEditing = editing > -1;
     return (
         <div className={style["container"]}>
             <FilterPanel
                 users={users}
                 setUserFilterTests={setUserFilterTests}
+                startDateFilter={startDateFilter}
+                endDateFilter={endDateFilter}
+                setStartDateFilter={setStartDateFilter}
+                setEndDateFilter={setEndDateFilter}
             />
             <div className={style["table-container"]}>
                 <table className={style["shifts"]}>
@@ -138,7 +150,13 @@ const columns = [
     ""
 ];
 
-function process(shifts, hourlyRate, userFilters) {
+function process(
+    shifts,
+    hourlyRate,
+    userFilter,
+    startDateFilter,
+    endDateFilter
+) {
     return shifts
         .map(shift => {
             const { id, userId } = shift;
@@ -169,15 +187,9 @@ function process(shifts, hourlyRate, userFilters) {
             };
         })
         .filter(shift => {
-            if (userFilters.length > 0) {
-                for (let i in userFilters) {
-                    const result = userFilters[i](shift);
-                    if (result === true) return result;
-                }
-            } else {
-                return true;
-            }
-            return false;
+            let containsUser = containsUserInFilter(userFilter, shift);
+            let inRange = isWithinRange(shift, startDateFilter, endDateFilter);
+            return containsUser && inRange;
         })
         .sort((a, b) => {
             let diff = getTime(b.shiftDate) - getTime(a.shiftDate);
@@ -188,6 +200,27 @@ function process(shifts, hourlyRate, userFilters) {
             }
             return diff;
         });
+}
+
+function isWithinRange(shift, start, end) {
+    const shiftDate = moment(shift.shiftDate);
+    if (start === null && end === null) {
+        return true;
+    } else if (start === null) {
+        return shiftDate.isSameOrBefore(end);
+    } else if (end === null) {
+        return shiftDate.isSameOrAfter(start);
+    }
+    return shiftDate.isSameOrBefore(end) && shiftDate.isSameOrAfter(start);
+}
+
+function containsUserInFilter(userFilter, shift) {
+    if (userFilter.length > 0) {
+        return userFilter
+            .map(test => test(shift))
+            .reduce((acc, result) => acc || result);
+    }
+    return true;
 }
 
 export default ShiftList;
