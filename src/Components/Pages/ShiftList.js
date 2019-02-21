@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import style from "./ShiftList.scss";
+import FilterPanel from "./FilterPanel";
 import ShiftRows from "./ShiftRows";
 import ShiftForm from "../Forms/ShiftForm";
 import { api } from "../../utils/api";
@@ -17,6 +18,7 @@ function ShiftList({ user, org }) {
     const [shifts, setShifts] = useState([]);
     const [users, setUsers] = useState({});
     const [editing, setEditing] = useState(-1);
+    const [userFilterTests, setUserFilterTests] = useState([]);
 
     useEffect(() => {
         Promise.all([api.get("/shifts"), api.get("/users")]).then(responses => {
@@ -63,59 +65,15 @@ function ShiftList({ user, org }) {
         });
     };
 
-    const processedShifts = shifts
-        .map(shift => {
-            const { id, userId } = shift;
-            const breakLength = parseInt(shift.breakLength) || 0;
-            const [shiftDate, startTime] = shift.start.split(" ");
-            const [endDate, endTime] = shift.finish.split(" ");
-            const hoursWorked = getHoursWorked(startTime, endTime, breakLength);
-            const shiftCost = getShiftCost(
-                shiftDate,
-                endDate,
-                startTime,
-                endTime,
-                org.hourlyRate,
-                breakLength,
-                hoursWorked
-            );
-
-            return {
-                id,
-                userId,
-                shiftDate,
-                startTime,
-                endTime,
-                breakLength,
-                hoursWorked,
-                shiftCost,
-                breakLength
-            };
-        })
-        .sort((a, b) => {
-            let diff = getTime(b.shiftDate) - getTime(a.shiftDate);
-            if (diff === 0) {
-                diff =
-                    convertToMinutes(b.startTime) -
-                    convertToMinutes(a.startTime);
-            }
-            return diff;
-        });
-
-    const columns = [
-        "Name",
-        "Shift Date",
-        "Start Time",
-        "Finish Time",
-        "Break Length",
-        "Hours Worked",
-        "Shift Cost",
-        ""
-    ];
-
+    console.log(userFilterTests);
+    const processedShifts = process(shifts, org.hourlyRate, userFilterTests);
     const isEditing = editing > -1;
     return (
         <div className={style["container"]}>
+            <FilterPanel
+                users={users}
+                setUserFilterTests={setUserFilterTests}
+            />
             <div className={style["table-container"]}>
                 <table className={style["shifts"]}>
                     <thead>
@@ -167,6 +125,69 @@ function ShiftList({ user, org }) {
             />
         </div>
     );
+}
+
+const columns = [
+    "Name",
+    "Shift Date",
+    "Start Time",
+    "Finish Time",
+    "Break Length",
+    "Hours Worked",
+    "Shift Cost",
+    ""
+];
+
+function process(shifts, hourlyRate, userFilters) {
+    return shifts
+        .map(shift => {
+            const { id, userId } = shift;
+            const breakLength = parseInt(shift.breakLength) || 0;
+            const [shiftDate, startTime] = shift.start.split(" ");
+            const [endDate, endTime] = shift.finish.split(" ");
+            const hoursWorked = getHoursWorked(startTime, endTime, breakLength);
+            const shiftCost = getShiftCost(
+                shiftDate,
+                endDate,
+                startTime,
+                endTime,
+                hourlyRate,
+                breakLength,
+                hoursWorked
+            );
+
+            return {
+                id,
+                userId,
+                shiftDate,
+                startTime,
+                endTime,
+                breakLength,
+                hoursWorked,
+                shiftCost,
+                breakLength
+            };
+        })
+        .filter(shift => {
+            if (userFilters.length > 0) {
+                for (let i in userFilters) {
+                    const result = userFilters[i](shift);
+                    if (result === true) return result;
+                }
+            } else {
+                return true;
+            }
+            return false;
+        })
+        .sort((a, b) => {
+            let diff = getTime(b.shiftDate) - getTime(a.shiftDate);
+            if (diff === 0) {
+                diff =
+                    convertToMinutes(b.startTime) -
+                    convertToMinutes(a.startTime);
+            }
+            return diff;
+        });
 }
 
 export default ShiftList;
