@@ -1,13 +1,11 @@
 @import "../../variables.scss";
 
 .container {
+    @include form;
     margin: 0 auto;
     width: 570px;
     padding: 35px 30px 20px 30px;
     border-radius: 5px;
-    background: #fff;
-    box-shadow: $shadow;
-    border: $form-border;
 }
 
 .inputs {

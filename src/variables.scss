@@ -70,13 +70,17 @@ $form-border: 1px solid #dfdfdf;
     }
 }
 
-@mixin hidden-form($radius: 3px, $time: 0.2s) {
-    visibility: hidden;
-    opacity: 0;
+@mixin form {
     box-shadow: $shadow;
     border: $form-border;
-    border-radius: $radius;
     background-color: #fff;
+}
+
+@mixin hidden-form($radius: 3px, $time: 0.2s) {
+    @include form;
+    visibility: hidden;
+    opacity: 0;
+    border-radius: $radius;
     transition: $time ease-in;
 }
 
