@@ -94,32 +94,37 @@ function Dashboard({ user, updateUser }) {
             ) : (
                 <>
                     <div className={style["header"]}>
-                        <div className={style["org-name"]}>
-                            {myOrg.name}
-                            <div className={style["rate"]}>
-                                {`Rate: $${myOrg.hourlyRate} / hour`}
+                        <div className={style["org-section"]}>
+                            <div className={style["org-name"]}>
+                                {myOrg.name}
+                                <div className={style["rate"]}>
+                                    {`Rate: $${myOrg.hourlyRate} / hour`}
+                                </div>
                             </div>
-                        </div>
-                        <div className={style["edit-container"]}>
+                            <div className={style["edit-container"]}>
+                                <div
+                                    className={classNameForEdit}
+                                    onClick={toggleUpdateForm}
+                                >
+                                    <div>Edit</div>
+                                </div>
+                                <OrgForm
+                                    ref={updateFormRef}
+                                    formOpened={updateFormOpened}
+                                    toggleForm={toggleUpdateForm}
+                                    org={myOrg}
+                                    organisations={organisations}
+                                    setOrganisations={setOrganisations}
+                                    mode={UPDATE}
+                                    showFromRight={true}
+                                />
+                            </div>
                             <div
-                                className={classNameForEdit}
-                                onClick={toggleUpdateForm}
+                                className={style["controls"]}
+                                onClick={leaveOrg}
                             >
-                                <div>Edit</div>
+                                Leave
                             </div>
-                            <OrgForm
-                                ref={updateFormRef}
-                                formOpened={updateFormOpened}
-                                toggleForm={toggleUpdateForm}
-                                org={myOrg}
-                                organisations={organisations}
-                                setOrganisations={setOrganisations}
-                                mode={UPDATE}
-                                showFromRight={true}
-                            />
-                        </div>
-                        <div className={style["controls"]} onClick={leaveOrg}>
-                            Leave
                         </div>
                     </div>
                     <div className={style["body"]}>
