@@ -4,8 +4,8 @@ import style from "./SignUp.scss";
 import { withFormik } from "formik";
 import { object, string } from "yup";
 
-import Input from "../Controls/Input";
-import { VisibilityIcon } from "../Icons/Icons";
+import DetailsFragment from "./DetailsFragment";
+import PasswordFragment from "./PasswordFragment";
 import Button from "../Controls/Button";
 
 import { api } from "../../utils/api";
@@ -25,72 +25,22 @@ function InnerForm({
         <form onSubmit={handleSubmit}>
             <div className={style["heading"]}>Create an account</div>
             <div className={style["container"]}>
-                <Input
-                    name="name"
-                    label="Name"
-                    type="text"
-                    value={values.name}
-                    onChange={handleChange}
-                    invalid={touched.name && errors.name}
-                    errorMessage={errors.name}
-                    onBlur={handleBlur}
-                    correct={touched.name && !errors.name}
+                <DetailsFragment
+                    values={values}
+                    handleChange={handleChange}
+                    touched={touched}
+                    errors={errors}
+                    handleBlur={handleBlur}
                 />
-                <Input
-                    name="email"
-                    label="Email"
-                    type="email"
-                    onChange={handleChange}
-                    value={values.email}
-                    invalid={touched.email && errors.email}
-                    errorMessage={errors.email}
-                    onBlur={handleBlur}
-                    correct={touched.email && !errors.email}
+                <PasswordFragment
+                    status={status}
+                    setStatus={setStatus}
+                    values={values}
+                    handleChange={handleChange}
+                    touched={touched}
+                    errors={errors}
+                    handleBlur={handleBlur}
                 />
-                <Input
-                    name="password"
-                    label="Password"
-                    type={status.visiblePassword ? "text" : "password"}
-                    onChange={handleChange}
-                    value={values.password}
-                    hint="Must contain at least six characters"
-                    invalid={touched.password && errors.password}
-                    onBlur={handleBlur}
-                    errorMessage={errors.password}
-                    correct={touched.password && !errors.password}
-                >
-                    <VisibilityIcon
-                        visiblePassword={status.visiblePassword}
-                        setVisiblePassword={value =>
-                            setStatus({ ...status, visiblePassword: value })
-                        }
-                    />
-                </Input>
-                <Input
-                    name="passwordConfirmation"
-                    label="Confirm Password"
-                    type={status.visibleConfirmation ? "text" : "password"}
-                    onChange={handleChange}
-                    value={values.passwordConfirmation}
-                    hint="Re-type your password to make sure it's correct"
-                    invalid={
-                        touched.passwordConfirmation &&
-                        errors.passwordConfirmation
-                    }
-                    errorMessage={errors.passwordConfirmation}
-                    onBlur={handleBlur}
-                    correct={
-                        touched.passwordConfirmation &&
-                        !errors.passwordConfirmation
-                    }
-                >
-                    <VisibilityIcon
-                        visiblePassword={status.visibleConfirmation}
-                        setVisiblePassword={value =>
-                            setStatus({ ...status, visibleConfirmation: value })
-                        }
-                    />
-                </Input>
                 <Button
                     type="submit"
                     disabled={isSubmitting}
