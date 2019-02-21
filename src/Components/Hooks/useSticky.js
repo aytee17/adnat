@@ -52,7 +52,6 @@ export default function useSticky(stickee) {
 
     function unSetRowRef(scrollIntoView) {
         if (scrollIntoView === true) {
-            console.log("scrolling");
             stickerRef.current.scrollIntoView();
         }
         stickerRef.current = null;
