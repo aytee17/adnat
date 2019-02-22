@@ -2,10 +2,11 @@ import React from "react";
 import style from "./SignUp.scss";
 
 import { withFormik } from "formik";
-import { object, string } from "yup";
+import { object } from "yup";
 
 import DetailsFragment from "./DetailsFragment";
 import PasswordFragment from "./PasswordFragment";
+import { detailsSchema, passwordSchema } from "./schemas";
 import Button from "../Controls/Button";
 
 import { api } from "../../utils/api";
@@ -60,24 +61,7 @@ const SignUp = withFormik({
         password: "",
         passwordConfirmation: ""
     }),
-    validationSchema: object().shape({
-        name: string().required("Name is required"),
-        email: string()
-            .email("Incorrect email structure")
-            .required("An email is required"),
-        password: string()
-            .min(6, "Password is shorter than six characters")
-            .required("A password is required"),
-        passwordConfirmation: string()
-            .required("Please confirm your password")
-            .when("password", (password, schema) =>
-                schema.test(
-                    "passwords match",
-                    "Passwords do not match",
-                    passwordConfirmation => passwordConfirmation === password
-                )
-            )
-    }),
+    validationSchema: object().shape({ ...detailsSchema, ...passwordSchema }),
     handleSubmit: (values, { props, setSubmitting, setErrors, setStatus }) => {
         setStatus({ visiblePassword: false, visibleConfirmation: false });
 
