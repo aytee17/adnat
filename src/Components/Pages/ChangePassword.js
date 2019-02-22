@@ -15,6 +15,7 @@ function ChangePassword() {
                 <div>
                     <div>Change Password</div>
                     <ChangePasswordForm setChanged={setChanged} />
+                    <Link to="/">Back to Dashboard</Link>
                 </div>
             )}
         </div>
