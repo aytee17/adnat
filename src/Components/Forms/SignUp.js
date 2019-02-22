@@ -11,6 +11,8 @@ import Button from "../Controls/Button";
 
 import { api } from "../../utils/api";
 
+const schema = passwordSchema({ newPassword: false });
+
 function InnerForm({
     values,
     errors,
@@ -61,7 +63,11 @@ const SignUp = withFormik({
         password: "",
         passwordConfirmation: ""
     }),
-    validationSchema: object().shape({ ...detailsSchema, ...passwordSchema }),
+    validationSchema: object().shape({
+        ...detailsSchema,
+        password: schema.password,
+        passwordConfirmation: schema.passwordConfirmation
+    }),
     handleSubmit: (values, { props, setSubmitting, setErrors, setStatus }) => {
         setStatus({ visiblePassword: false, visibleConfirmation: false });
 
