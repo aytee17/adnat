@@ -6,7 +6,8 @@ function DetailsFragment({
     handleChange,
     touched,
     errors,
-    handleBlur
+    handleBlur,
+    showCorrect
 }) {
     return (
         <React.Fragment>
@@ -19,7 +20,7 @@ function DetailsFragment({
                 invalid={touched.name && errors.name}
                 errorMessage={errors.name}
                 onBlur={handleBlur}
-                correct={touched.name && !errors.name}
+                correct={showCorrect ? touched.name && !errors.name : false}
             />
             <Input
                 name="email"
@@ -30,7 +31,7 @@ function DetailsFragment({
                 invalid={touched.email && errors.email}
                 errorMessage={errors.email}
                 onBlur={handleBlur}
-                correct={touched.email && !errors.email}
+                correct={showCorrect ? touched.email && !errors.email : false}
             />
         </React.Fragment>
     );

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import SecureLS from "secure-ls";
-import { Router } from "@reach/router";
+import { Router, navigate } from "@reach/router";
 import { hot } from "react-hot-loader";
 import { api, setAuth } from "../utils/api";
 
 import Home from "./Pages/Home";
 import Dashboard from "./Pages/Dashboard";
+import UserDetails from "./Pages/UserDetails";
 import NavBar from "./NavBar";
 
 const storage = new SecureLS({ encodingType: "aes" });
@@ -79,6 +80,7 @@ function App() {
             storage.set("loggedIn", false);
             channel.postMessage({ type: "LOGOUT", payload: null });
         }
+        navigate("/");
     }
 
     const updateUser = update => setUser({ ...user, ...update });
@@ -93,6 +95,11 @@ function App() {
             <NavBar name={name} email={email} logout={logout} />
             <Router>
                 <Dashboard path="/" user={user} updateUser={updateUser} />
+                <UserDetails
+                    path="/user_details"
+                    user={user}
+                    updateUser={updateUser}
+                />
             </Router>
         </div>
     );

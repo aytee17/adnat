@@ -3,6 +3,7 @@ import style from "./NavBar.scss";
 import { MenuButton, MenuItem } from "./MenuButton";
 import Logo from "./Logo";
 import { api } from "../utils/api";
+import { Link } from "@reach/router";
 
 function NavBar({ name, email, logout }) {
     function handleLogout() {
@@ -17,8 +18,10 @@ function NavBar({ name, email, logout }) {
                 <Logo small white />
                 <MenuButton>
                     <MenuItem top={true}>
-                        <div>{name}</div>
-                        <div style={{ fontSize: "13px" }}>{email}</div>
+                        <Link to="/user_details">
+                            <div>{name}</div>
+                            <div style={{ fontSize: "13px" }}>{email}</div>
+                        </Link>
                     </MenuItem>
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </MenuButton>
