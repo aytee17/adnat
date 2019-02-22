@@ -7,6 +7,7 @@ import { api, setAuth } from "../utils/api";
 import Home from "./Pages/Home";
 import Dashboard from "./Pages/Dashboard";
 import UserDetails from "./Pages/UserDetails";
+import ChangePassword from "./Pages/ChangePassword";
 import NavBar from "./NavBar";
 import PageLayout from "./PageLayout";
 
@@ -102,6 +103,7 @@ function App() {
                         user={user}
                         updateUser={updateUser}
                     />
+                    <ChangePassword path="/change_password" />
                 </Router>
             </PageLayout>
         </div>
