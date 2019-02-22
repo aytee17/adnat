@@ -8,6 +8,7 @@ import Home from "./Pages/Home";
 import Dashboard from "./Pages/Dashboard";
 import UserDetails from "./Pages/UserDetails";
 import NavBar from "./NavBar";
+import PageLayout from "./PageLayout";
 
 const storage = new SecureLS({ encodingType: "aes" });
 const channel = new BroadcastChannel("session");
@@ -93,14 +94,16 @@ function App() {
     ) : (
         <div>
             <NavBar name={name} email={email} logout={logout} />
-            <Router>
-                <Dashboard path="/" user={user} updateUser={updateUser} />
-                <UserDetails
-                    path="/user_details"
-                    user={user}
-                    updateUser={updateUser}
-                />
-            </Router>
+            <PageLayout>
+                <Router>
+                    <Dashboard path="/" user={user} updateUser={updateUser} />
+                    <UserDetails
+                        path="/user_details"
+                        user={user}
+                        updateUser={updateUser}
+                    />
+                </Router>
+            </PageLayout>
         </div>
     );
 }

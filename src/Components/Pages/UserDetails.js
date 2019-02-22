@@ -10,7 +10,7 @@ function UserDetails({ user, updateUser }) {
     const { name, email } = user;
 
     return (
-        <div className={style["container"]}>
+        <div>
             <div className={style["header"]}>Account Information</div>
             <Link to="/">Back to Dashboard</Link>
             {!editing ? (

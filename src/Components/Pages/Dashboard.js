@@ -57,7 +57,7 @@ function Dashboard({ user, updateUser }) {
         [style["active"]]: updateFormOpened
     });
     return (
-        <div className={style["container"]}>
+        <div>
             {organisationId === null ? (
                 <div>
                     <div className={style["greeting"]}>Hi, {name}!</div>
