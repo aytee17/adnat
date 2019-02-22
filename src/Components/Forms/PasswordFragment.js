@@ -2,14 +2,14 @@ import React from "react";
 import Input from "../Controls/Input";
 import { VisibilityIcon } from "../Icons/Icons";
 
-function DetailsFragment({
-    status,
-    setStatus,
+function PasswordFragment({
     values,
-    handleChange,
     touched,
     errors,
-    handleBlur
+    handleChange,
+    handleBlur,
+    status,
+    setStatus
 }) {
     return (
         <React.Fragment>
@@ -59,4 +59,4 @@ function DetailsFragment({
     );
 }
 
-export default DetailsFragment;
+export default PasswordFragment;
