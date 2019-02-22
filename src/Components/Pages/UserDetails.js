@@ -12,6 +12,7 @@ function UserDetails({ user, updateUser }) {
     return (
         <div className={style["container"]}>
             <div className={style["header"]}>Account Information</div>
+            <Link to="/">Back to Dashboard</Link>
             {!editing ? (
                 <div className={style["details"]}>
                     <div className={style["name"]}>{name}</div>
