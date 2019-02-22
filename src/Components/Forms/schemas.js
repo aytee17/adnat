@@ -7,12 +7,12 @@ export const detailsSchema = {
         .required("An email is required")
 };
 
-export const passwordSchema = {
+export const passwordSchema = ({ newPassword }) => ({
     password: string()
         .min(6, "Password is shorter than six characters")
-        .required("A password is required"),
+        .required(`A ${newPassword ? "new" : ""} password is required`),
     passwordConfirmation: string()
-        .required("Please confirm your password")
+        .required(`Please confirm your ${newPassword ? "new" : ""} password`)
         .when("password", (password, schema) =>
             schema.test(
                 "passwords match",
@@ -20,4 +20,4 @@ export const passwordSchema = {
                 passwordConfirmation => passwordConfirmation === password
             )
         )
-};
+});
