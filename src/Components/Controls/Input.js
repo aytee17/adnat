@@ -25,7 +25,7 @@ function Input({
     });
 
     const messageClassName = classnames(style["hint"], {
-        [style["error"]]: errorMessage
+        [style["error"]]: invalid
     });
 
     const labelClassName = classnames({
