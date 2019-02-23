@@ -7,6 +7,7 @@ import { object, string, bool } from "yup";
 import Input from "../Controls/Input";
 import { MailIcon, LockIcon, VisibilityIcon } from "../Icons/Icons";
 import Button from "../Controls/Button";
+import Error from "./Error";
 import { api } from "../../utils/api";
 import { Link } from "@reach/router";
 
@@ -97,6 +98,7 @@ function InnerForm({
                     <span>Remember me</span>
                 </div>
             </div>
+            <Error>{errors.general}</Error>
         </form>
     );
 }
@@ -120,10 +122,17 @@ const Login = withFormik({
         api.post("/auth/login", {
             ...values,
             email: values.email.trim()
-        }).then(response => {
-            setSubmitting(false);
-            props.login(response.data.sessionId);
-        });
+        })
+            .then(response => {
+                setSubmitting(false);
+                props.login(response.data.sessionId);
+            })
+            .catch(err => {
+                setSubmitting(false);
+                if (err.response.status === 404) {
+                    setErrors({ general: err.response.data.error });
+                }
+            });
     }
 })(InnerForm);
 

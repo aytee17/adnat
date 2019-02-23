@@ -75,10 +75,17 @@ const SignUp = withFormik({
             ...values,
             name: values.name.trim(),
             email: values.email.trim()
-        }).then(response => {
-            setSubmitting(false);
-            props.login(response.data.sessionId);
-        });
+        })
+            .then(response => {
+                setSubmitting(false);
+                props.login(response.data.sessionId);
+            })
+            .catch(err => {
+                setSubmitting(false);
+                if (err.response.status === 400) {
+                    setErrors({ email: err.response.data.error });
+                }
+            });
     }
 })(InnerForm);
 

@@ -1,6 +1,7 @@
 import React from "react";
 import style from "./ChangePasswordForm.scss";
 import PasswordFragment from "./PasswordFragment";
+import Error from "./Error";
 import { withFormik } from "formik";
 import { object, string } from "yup";
 import { passwordSchema } from "./schemas";
@@ -56,6 +57,7 @@ function InnerForm({
                     status={status}
                     setStatus={setStatus}
                 />
+                <Error>{errors.general}</Error>
                 <Button
                     style={{ marginTop: "12px" }}
                     type="submit"
@@ -80,7 +82,7 @@ const ChangePasswordForm = withFormik({
         password: schema.password,
         passwordConfirmation: schema.passwordConfirmation
     }),
-    handleSubmit: (values, { props, setSubmitting, setStatus }) => {
+    handleSubmit: (values, { props, setSubmitting, setStatus, setErrors }) => {
         setStatus({
             visibleOld: false,
             visiblePassword: false,
@@ -95,13 +97,15 @@ const ChangePasswordForm = withFormik({
         api.put("/users/me/change_password", transformedValues)
             .then(response => {
                 setSubmitting(false);
-                console.log(response);
                 if (response.data === "OK") {
                     props.setChanged(true);
                 }
             })
-            .catch(error => {
-                console.log(error);
+            .catch(err => {
+                setSubmitting(false);
+                if (err.response.status === 400) {
+                    setErrors({ general: err.response.data.error });
+                }
             });
     }
 })(InnerForm);
